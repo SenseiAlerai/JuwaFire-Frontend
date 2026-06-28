@@ -20,7 +20,7 @@ export default function PaymentStrip() {
 
   return (
     <div className="relative mt-4 overflow-hidden py-1 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-      <div className="flex w-max animate-marquee items-center gap-5 [animation-direction:reverse] [animation-duration:56s] motion-reduce:animate-none">
+      <div className="flex w-max animate-marquee items-center gap-5 [animation-direction:reverse] [animation-duration:18s] motion-reduce:animate-none">
         {row.map((p, i) => (
           <div
             key={`${p.name}-${i}`}
@@ -40,5 +40,6 @@ export default function PaymentStrip() {
     </div>
   );
 }
+
 
 
