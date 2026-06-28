@@ -1,26 +1,166 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ============================================================
+   JACKPOT CARNIVAL — Neon Nightlife casino theme (Tailwind v4)
+   Dark stage, electric color, gold luxury. Energy you can feel.
+   ============================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Stage */
+  --color-bg: #0a0613;
+  --color-bg-2: #160a2b;
+
+  /* Electric brand palette */
+  --color-magenta: #ff2e9a;   /* excitement / primary */
+  --color-violet: #b056ff;    /* energy / depth */
+  --color-cyan: #2de2ff;      /* electric / fresh */
+  --color-gold: #ffc63d;      /* luxury / jackpot */
+  --color-lime: #aaff3c;      /* win / money */
+  --color-red: #ff3b5c;       /* hot / urgency */
+
+  /* Text on dark */
+  --color-ink: #f6edff;
+  --color-ink-soft: #b6a3d8;
+
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-ink);
+
+  /* Fonts (wired in layout.tsx via next/font) */
+  --font-display: var(--font-sora), "Trebuchet MS", sans-serif;
+  --font-body: var(--font-jakarta), system-ui, sans-serif;
+
+  /* Motion */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-bob: bob 2.6s ease-in-out infinite;
+  --animate-pop: pop 0.45s var(--ease-bounce);
+  --animate-shine: shine 4s linear infinite;
+  --animate-spin-slow: spin 16s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-glow: glow 2.4s ease-in-out infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-7px) rotate(3deg); }
+}
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes glow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@keyframes aurora {
+  0% { transform: translate3d(-6%, -3%, 0) rotate(0deg); }
+  100% { transform: translate3d(6%, 4%, 0) rotate(8deg); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes rise {
+  0% { transform: translateY(8vh) scale(0.7); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+}
+
+/* ============================================================
+   Base — dark neon stage
+   ============================================================ */
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(900px 600px at 8% -5%, rgba(255, 46, 154, 0.28), transparent 60%),
+    radial-gradient(900px 700px at 100% 0%, rgba(176, 86, 255, 0.30), transparent 55%),
+    radial-gradient(800px 700px at 50% 115%, rgba(45, 226, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, var(--color-bg-2) 0%, var(--color-bg) 45%);
+  background-attachment: fixed;
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--color-magenta); color: #0a0613; }
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: #110a1e; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-magenta), var(--color-violet));
+  border-radius: 999px;
+  border: 3px solid #110a1e;
+}
+
+/* ============================================================
+   Reusable neon utilities
+   ============================================================ */
+@layer components {
+  .font-display { font-family: var(--font-display); }
+
+  /* dark glass card with neon edge + lift */
+  .candy-card {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.5rem;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+      0 24px 60px -28px rgba(176, 86, 255, 0.55);
+    backdrop-filter: blur(14px);
+  }
+
+  /* animated gradient text — the headline punch */
+  .shine-text {
+    background: linear-gradient(
+      100deg,
+      var(--color-magenta) 0%, var(--color-gold) 30%,
+      var(--color-cyan) 50%, var(--color-violet) 72%, var(--color-magenta) 100%
+    );
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-shine);
+    filter: drop-shadow(0 2px 18px rgba(255, 46, 154, 0.35));
+  }
+
+  /* glowing pill chip */
+  .neon-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+  }
+
+  /* hide scrollbar but keep scrolling (mobile game rails) */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
