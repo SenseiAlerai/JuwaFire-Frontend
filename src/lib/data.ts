@@ -30,6 +30,7 @@ export const GAMES: Game[] = [
   { name: "Milkyway", subtitle: "Galaxy Spins", category: "Slots", image: "/games/game-milkyway.png", url: "https://milkywayapp.xyz/", accent: "#b056ff" },
   { name: "Ultra Panda", subtitle: "Fortune Panda", category: "Fish", badge: HOT, image: "/games/game-ultrapanda.png", url: "http://www.ultrapanda.mobi/", accent: "#aaff3c" },
   { name: "Cash Frenzy", subtitle: "Bonus Rush", category: "Slots", image: "/games/game-cashfrenzy.png", url: "https://www.cashfrenzy777.com/m", accent: "#ff7a2f" },
+  { name: "Vblink", subtitle: "Neon Spins", category: "Slots", badge: NEW, image: "/games/game-vblink.png", url: "https://www.vblink777.com/", accent: "#2de2ff" },
   { name: "Cash Machine", subtitle: "Money Reels", category: "Slots", image: "/games/game-cashmachine.png", url: "http://www.cashmachine777.com/", accent: "#ffc63d" },
   { name: "Joker777", subtitle: "Wild Cards", category: "Slots", badge: NEW, image: "/games/game-joker777.png", url: "https://www.joker777.win/", accent: "#ff2e9a" },
   { name: "Gameroom", subtitle: "VIP Lounge", category: "Slots", image: "/games/game-gameroom.png", url: "https://www.gameroom777.com/", accent: "#2de2ff" },
@@ -113,5 +114,6 @@ export const WINNERS = [
   { name: "Ivy S.", game: "Cash Frenzy", amount: "$1,870" },
   { name: "Max W.", game: "Ultra Panda", amount: "$9,300" },
 ];
+
 
 
