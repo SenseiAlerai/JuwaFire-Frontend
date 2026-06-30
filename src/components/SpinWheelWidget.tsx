@@ -209,9 +209,9 @@ export default function SpinWheelWidget() {
         {!open && (
           <motion.div
             key="peek"
-            initial={{ x: 120 }}
-            animate={{ x: 0 }}
-            exit={{ x: 120, opacity: 0 }}
+            initial={{ x: 180 }}
+            animate={{ x: 90 }}
+            exit={{ x: 180, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 22, delay: 0.6 }}
             onClick={openModal}
             aria-label="Open spin wheel"
@@ -219,11 +219,7 @@ export default function SpinWheelWidget() {
             tabIndex={0}
             onKeyDown={e => e.key === "Enter" && openModal()}
             className="fixed right-0 z-40 cursor-pointer"
-            style={{
-              top: "50%",
-              transform: "translateY(-50%) translateX(50%)",
-              /* show only the left half */
-            }}
+            style={{ top: "calc(50% - 90px)" }}
           >
             {/* glow halo */}
             <div
