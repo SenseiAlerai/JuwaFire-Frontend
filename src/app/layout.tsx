@@ -9,6 +9,7 @@ import Toaster from "@/components/Toaster";
 import SoundToggle from "@/components/SoundToggle";
 import SupportButton from "@/components/SupportButton";
 import LiveActivity from "@/components/LiveActivity";
+import SpinWheelWidget from "@/components/SpinWheelWidget";
 import { auth } from "@/auth";
 
 const sora = Sora({
@@ -50,6 +51,7 @@ export default async function RootLayout({
         <BottomNav />
         <Toaster />
         <SoundToggle />
+        <SpinWheelWidget />
         <SupportButton />
         <LiveActivity />
       </body>

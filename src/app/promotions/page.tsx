@@ -1,7 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { CandyLink } from "@/components/CandyButton";
 import Reveal from "@/components/Reveal";
-import FortuneWheel from "@/components/FortuneWheel";
 import { PROMOS } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
 
@@ -97,18 +96,6 @@ export default function PromotionsPage() {
             );
           })}
         </div>
-
-        {/* Wheel */}
-        <Reveal>
-          <div className="candy-card mt-12 rounded-[2rem] p-8 sm:p-12">
-            <h2 className="text-center font-display text-3xl font-extrabold text-ink sm:text-4xl">
-              Your daily free <span className="text-violet">spin</span>
-            </h2>
-            <div className="mt-8">
-              <FortuneWheel />
-            </div>
-          </div>
-        </Reveal>
 
         {/* FAQ */}
         <div className="mx-auto mt-12 max-w-3xl">
