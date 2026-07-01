@@ -26,9 +26,13 @@ export default function Navbar({ user }: { user: NavUser }) {
   const displayName = user?.username || user?.name || "Player";
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+    <header className="sticky top-0 z-50 px-3 pt-2 sm:px-5 sm:pt-3">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-1 py-1 sm:px-2">
-        <Link href="/" className="block shrink-0" aria-label="JuwaFire home">
+        <Link
+          href="/"
+          className="-ml-2 -mt-1.5 block shrink-0 sm:-ml-3 sm:-mt-2"
+          aria-label="JuwaFire home"
+        >
           <Image
             src="/juwafire-logo.png"
             alt="JuwaFire Sweepstakes Games"
@@ -62,7 +66,7 @@ export default function Navbar({ user }: { user: NavUser }) {
         </ul>
 
         {/* auth controls — visible on all sizes */}
-        <div className="candy-card flex items-center gap-1.5 rounded-full px-1.5 py-1 shadow-[0_12px_34px_-18px_rgba(176,86,255,0.85)] sm:gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {user ? (
             <>
               <CandyLink href="/dashboard" variant="primary" size="sm">
