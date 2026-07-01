@@ -1,4 +1,5 @@
 ﻿import { CandyLink } from "@/components/CandyButton";
+import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import GameCard from "@/components/GameCard";
 import GamesMarquee from "@/components/GamesMarquee";
@@ -9,7 +10,7 @@ import WinnersTable from "@/components/WinnersTable";
 import JackpotTicker from "@/components/JackpotTicker";
 import { GAMES, PROMOS } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
-import { Ticket, Gift, Zap, ShieldCheck, Star, Headphones, Clock, Crown } from "lucide-react";
+import { Ticket, Gift, Zap, ShieldCheck, Headphones, Clock, Crown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -37,52 +38,7 @@ export default function Home() {
   return (
     <>
       {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="relative px-4 pt-3 sm:pt-6">
-        <div className="mx-auto max-w-3xl">
-          <div className="text-center">
-            <span className="neon-chip inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-display font-semibold text-ink">
-              <span className="h-2.5 w-2.5 animate-ping rounded-full bg-lime" />
-              Premium Sweepstakes Casino
-            </span>
-
-            <h1 className="mt-4 font-display text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-              <span className="block text-ink">Feel the rush at</span>
-              <span className="block shine-text">JuwaFire</span>
-            </h1>
-
-            <p className="mx-auto mt-5 max-w-xl text-lg text-ink-soft">
-              Tap any game to play instantly. No downloads, no waiting — fund your wallet,
-              jump straight in, and cash out your winnings in minutes.
-            </p>
-
-            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <CandyLink href="/promotions" variant="primary" size="lg">
-                <Gift className="h-5 w-5" /> Claim 100% Bonus
-              </CandyLink>
-              <CandyLink href="/games" variant="ghost" size="lg">
-                Enter the Games
-              </CandyLink>
-            </div>
-
-            <div className="mt-6 flex items-center justify-center gap-2 text-ink-soft">
-              <div className="flex -space-x-2">
-                {["#ff2e9a", "#b056ff", "#aaff3c", "#2de2ff"].map((c) => (
-                  <span
-                    key={c}
-                    className="h-7 w-7 rounded-full border-2 border-bg"
-                    style={{ background: c }}
-                  />
-                ))}
-              </div>
-              <span className="flex items-center gap-1 text-sm">
-                <Star className="h-4 w-4 fill-gold text-gold" />
-                <strong className="text-ink">4.9/5</strong> from 60k+ players
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      <Hero />
 
       {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HOTTEST GAMES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="px-4 pt-12">

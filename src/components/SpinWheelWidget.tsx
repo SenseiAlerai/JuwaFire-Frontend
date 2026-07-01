@@ -4,7 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
-import { sfxSpin, sfxWin } from "@/lib/sound";
+import { sfxSpin, sfxWin, sfxTick, sfxCoin } from "@/lib/sound";
+
+/** Mobile haptic feedback — no-op where unsupported. */
+function haptic(pattern: number | number[]) {
+  if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+    try { navigator.vibrate(pattern); } catch { /* ignore */ }
+  }
+}
 
 /* ─── Prize data ───────────────────────────────────────────────── */
 const PRIZES = [
@@ -367,13 +374,26 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
     setResult(null);
     setSpinning(true);
     sfxSpin();
+    haptic(18);
     const winner = Math.floor(Math.random() * N);
     const target = 360 * 5 + (360 - winner * SEG - SEG / 2);
     setRotation(prev => prev - (prev % 360) + target);
+
     if (reduce) {
       setSpinning(false);
       setResult(`${PRIZES[winner].label} ${PRIZES[winner].sub}`);
       sfxWin();
+      return;
+    }
+
+    // decelerating mechanical ticks — each peg the flapper passes, slowing down
+    let t = 0.05;
+    let dt = 0.05;
+    while (t < 4.35) {
+      const at = t;
+      setTimeout(() => { sfxTick(); haptic(5); }, at * 1000);
+      t += dt;
+      dt *= 1.16; // intervals grow → wheel slows
     }
   }
 
@@ -383,7 +403,10 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
     const idx = (N - Math.round(((rotation % 360) + SEG / 2) / SEG)) % N;
     const p   = PRIZES[(idx + N) % N];
     setResult(`${p.label} ${p.sub}`);
+    // celebration: triumphant arpeggio + coin cascade + payout haptic
     sfxWin();
+    [0, 110, 230, 360].forEach((d) => setTimeout(sfxCoin, d));
+    haptic([0, 45, 35, 45, 35, 90]);
   }
 
   function openModal() { setResult(null); setOpen(true); }
