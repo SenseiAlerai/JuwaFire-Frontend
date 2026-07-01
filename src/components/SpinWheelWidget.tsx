@@ -5,21 +5,26 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { sfxSpin, sfxWin } from "@/lib/sound";
 
-/* ── Prize segments ─────────────────────────────────────────── */
+/* ─── Prize data ───────────────────────────────────────────────── */
 const PRIZES = [
-  { label: "50 Spins",  color: "#6a1a9a" },
-  { label: "$5 Cash",   color: "#9a1a55" },
-  { label: "2× Boost", color: "#1a5a6a" },
-  { label: "$25 Cash",  color: "#7a4510" },
-  { label: "Mystery",   color: "#3a1a7a" },
-  { label: "$10 Cash",  color: "#7a1a3a" },
-  { label: "100 Spins", color: "#1a4a3a" },
-  { label: "Jackpot!",  color: "#5a1a8a" },
+  { label: "50",   sub: "SPINS",   coin: "#ffc63d" },
+  { label: "$5",   sub: "CASH",    coin: "#aaff3c" },
+  { label: "2×",   sub: "BOOST",   coin: "#2de2ff" },
+  { label: "$25",  sub: "CASH",    coin: "#ffc63d" },
+  { label: "???",  sub: "MYSTERY", coin: "#b056ff" },
+  { label: "$10",  sub: "CASH",    coin: "#ffc63d" },
+  { label: "100",  sub: "SPINS",   coin: "#aaff3c" },
+  { label: "🔥",   sub: "JACKPOT", coin: "#ff3b5c" },
 ];
 
-const SEG   = 360 / PRIZES.length;
-const C     = 110; // svg centre
-const R     = 88;  // radius
+/* alternating high-contrast: deep casino red ↔ near-black purple */
+const SEG_COLORS = ["#7a0c1f", "#0c0420"];
+
+const N   = PRIZES.length;
+const SEG = 360 / N;
+const C   = 120; // SVG centre (240×240 viewBox)
+const R   = 96;  // segment radius
+const RIM = 106; // outer rim radius
 const BULBS = 16;
 
 function pt(deg: number, r: number): [number, number] {
@@ -27,14 +32,20 @@ function pt(deg: number, r: number): [number, number] {
   return [C + r * Math.cos(a), C + r * Math.sin(a)];
 }
 
-/* ── Reusable wheel SVG (used in both peek + modal) ─────────── */
+/* ─── SVG Coin icon ────────────────────────────────────────────── */
+function CoinAt({ cx, cy, color, r = 7 }: { cx: number; cy: number; color: string; r?: number }) {
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r + 1.5} fill="rgba(0,0,0,0.4)" />
+      <circle cx={cx} cy={cy} r={r} fill={color} stroke="#fff8d0" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={r * 0.55} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1" />
+    </g>
+  );
+}
+
+/* ─── Shared wheel graphic ─────────────────────────────────────── */
 function WheelSVG({
-  rotation,
-  onAnimationComplete,
-  onHubClick,
-  spinning,
-  idSuffix,
-  reduce,
+  rotation, onAnimationComplete, onHubClick, spinning, idSuffix, reduce,
 }: {
   rotation: number;
   onAnimationComplete?: () => void;
@@ -43,130 +54,229 @@ function WheelSVG({
   idSuffix: string;
   reduce: boolean | null;
 }) {
-  const goldId   = `gold-${idSuffix}`;
-  const hubId    = `hub-${idSuffix}`;
-  const domeId   = `dome-${idSuffix}`;
-  const shadowId = `shadow-${idSuffix}`;
+  const ids = {
+    gold:    `gold-${idSuffix}`,
+    hub:     `hub-${idSuffix}`,
+    dome:    `dome-${idSuffix}`,
+    shadow:  `shadow-${idSuffix}`,
+    outerGlow: `og-${idSuffix}`,
+    seg:     (i: number) => `seg-${idSuffix}-${i}`,
+  };
 
   return (
     <div className="relative h-full w-full">
-      {/* rotating face */}
+      {/* ── rotating face ── */}
       <motion.svg
-        viewBox="0 0 220 220"
+        viewBox="0 0 240 240"
         className="absolute inset-0 h-full w-full"
         animate={{ rotate: rotation }}
-        transition={reduce ? { duration: 0 } : { duration: 4.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={reduce ? { duration: 0 } : { duration: 4.8, ease: [0.16, 1, 0.3, 1] }}
         onAnimationComplete={onAnimationComplete}
       >
         <defs>
-          <radialGradient id={domeId} cx="50%" cy="42%" r="62%">
-            <stop offset="0%"   stopColor="#fff" stopOpacity="0.13" />
-            <stop offset="55%"  stopColor="#000" stopOpacity="0" />
-            <stop offset="100%" stopColor="#000" stopOpacity="0.44" />
+          <radialGradient id={ids.dome} cx="50%" cy="40%" r="60%">
+            <stop offset="0%"   stopColor="#fff" stopOpacity="0.18" />
+            <stop offset="50%"  stopColor="#fff" stopOpacity="0.04" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
           </radialGradient>
+          {PRIZES.map((_, i) => (
+            <radialGradient key={i} id={ids.seg(i)} cx="30%" cy="30%" r="80%">
+              <stop offset="0%" stopColor={i % 2 === 0 ? "#c01030" : "#1a0835"} stopOpacity="1" />
+              <stop offset="100%" stopColor={SEG_COLORS[i % 2]} stopOpacity="1" />
+            </radialGradient>
+          ))}
         </defs>
+
+        {/* segments */}
         {PRIZES.map((p, i) => {
           const [x0, y0] = pt(i * SEG, R);
           const [x1, y1] = pt((i + 1) * SEG, R);
-          const [tx, ty] = pt(i * SEG + SEG / 2, R * 0.66);
+          const midAngle = i * SEG + SEG / 2;
+          const [tx, ty] = pt(midAngle, R * 0.58);
+          const [sx, sy] = pt(midAngle, R * 0.73);
+          const [cx, cy] = pt(midAngle, R * 0.88);
+
           return (
             <g key={i}>
+              {/* wedge */}
               <path
                 d={`M${C},${C} L${x0},${y0} A${R},${R} 0 0,1 ${x1},${y1} Z`}
-                fill={p.color}
-                stroke="rgba(255,198,61,0.35)"
+                fill={`url(#${ids.seg(i)})`}
+              />
+              {/* gold divider line */}
+              <line
+                x1={C} y1={C}
+                x2={x0} y2={y0}
+                stroke="rgba(255,198,61,0.55)"
                 strokeWidth="1"
               />
+              {/* prize amount */}
               <text
                 x={tx} y={ty}
-                fill="#fff"
-                fontSize="7.2"
-                fontWeight="700"
+                fill="#ffffff"
+                fontSize={p.label.length > 2 ? "11" : "13"}
+                fontWeight="900"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                transform={`rotate(${i * SEG + SEG / 2},${tx},${ty})`}
-                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}
+                transform={`rotate(${midAngle}, ${tx}, ${ty})`}
+                style={{ textShadow: "0 0 8px rgba(0,0,0,0.9)", fontFamily: "var(--font-sora,sans-serif)" }}
               >
                 {p.label}
               </text>
+              {/* sub-label */}
+              <text
+                x={sx} y={sy}
+                fill="rgba(255,255,255,0.75)"
+                fontSize="6"
+                fontWeight="700"
+                letterSpacing="0.5"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                transform={`rotate(${midAngle}, ${sx}, ${sy})`}
+              >
+                {p.sub}
+              </text>
+              {/* outer coin icon */}
+              <g transform={`rotate(${midAngle}, ${C}, ${C})`}>
+                <CoinAt cx={cx} cy={cy} color={p.coin} r={6.5} />
+              </g>
             </g>
           );
         })}
-        <circle cx={C} cy={C} r={R} fill={`url(#${domeId})`} />
+
+        {/* dome sheen */}
+        <circle cx={C} cy={C} r={R} fill={`url(#${ids.dome})`} />
       </motion.svg>
 
-      {/* static: rim + bulbs + hub + pointer */}
-      <svg viewBox="0 0 220 220" className="absolute inset-0 h-full w-full">
+      {/* ── static layer: rim + bulbs + hub + pointer ── */}
+      <svg viewBox="0 0 240 240" className="absolute inset-0 h-full w-full">
         <defs>
-          <linearGradient id={goldId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#fff2c0" />
-            <stop offset="42%"  stopColor="#f6c84d" />
-            <stop offset="60%"  stopColor="#dca42c" />
-            <stop offset="100%" stopColor="#9c6e16" />
+          <linearGradient id={ids.gold} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stopColor="#fff6b0" />
+            <stop offset="30%"  stopColor="#f7d060" />
+            <stop offset="65%"  stopColor="#d4920a" />
+            <stop offset="100%" stopColor="#8a5e00" />
           </linearGradient>
-          <radialGradient id={hubId} cx="50%" cy="38%" r="65%">
-            <stop offset="0%"   stopColor="#ff2e9a" />
-            <stop offset="50%"  stopColor="#b056ff" />
-            <stop offset="100%" stopColor="#3a0860" />
+          <radialGradient id={ids.hub} cx="45%" cy="35%" r="70%">
+            <stop offset="0%"   stopColor="#ff5ab8" />
+            <stop offset="45%"  stopColor="#c026e0" />
+            <stop offset="100%" stopColor="#38006a" />
           </radialGradient>
-          <filter id={shadowId} x="-40%" y="-40%" width="180%" height="180%">
-            <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodColor="#000" floodOpacity="0.5" />
+          <filter id={ids.shadow} x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.6" />
+          </filter>
+          <filter id={ids.outerGlow} x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#ffc63d" floodOpacity="0.5" />
           </filter>
         </defs>
 
-        {/* gold rim */}
-        <circle cx={C} cy={C} r={97}  fill="none" stroke={`url(#${goldId})`} strokeWidth="11" filter={`url(#${shadowId})`} />
-        <circle cx={C} cy={C} r={91}  fill="none" stroke="rgba(0,0,0,0.55)"       strokeWidth="2" />
-        <circle cx={C} cy={C} r={103} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+        {/* outer decorative ring — thin gold */}
+        <circle cx={C} cy={C} r={RIM + 5}
+          fill="none" stroke="rgba(255,210,80,0.35)" strokeWidth="1.5" />
 
-        {/* neon bulbs — 4-colour cycle */}
+        {/* main gold rim */}
+        <circle cx={C} cy={C} r={RIM}
+          fill="none"
+          stroke={`url(#${ids.gold})`}
+          strokeWidth="14"
+          filter={`url(#${ids.shadow})`} />
+
+        {/* rim inner shadow */}
+        <circle cx={C} cy={C} r={RIM - 7}
+          fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth="2" />
+
+        {/* rim outer highlight */}
+        <circle cx={C} cy={C} r={RIM + 7}
+          fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+
+        {/* ── bulbs: 4-colour neon cycle, larger ── */}
         {Array.from({ length: BULBS }).map((_, i) => {
-          const [bx, by] = pt((360 / BULBS) * i, 97);
+          const [bx, by] = pt((360 / BULBS) * i, RIM);
           const cols = ["#ff2e9a", "#b056ff", "#2de2ff", "#ffc63d"];
           const col  = cols[i % cols.length];
           return (
-            <circle key={i} cx={bx} cy={by} r={3.2}
-              fill={col} stroke="rgba(0,0,0,0.3)" strokeWidth="0.5"
-              style={{
-                filter: `drop-shadow(0 0 5px ${col})`,
-                animation: `twinkle 1.8s ease-in-out ${(i % 4) * 0.25}s infinite`,
-              }}
-            />
+            <g key={i}>
+              {/* shadow base */}
+              <circle cx={bx} cy={by} r={6.5}
+                fill="rgba(0,0,0,0.5)" />
+              {/* coloured bulb */}
+              <circle cx={bx} cy={by} r={5.5}
+                fill={col}
+                stroke="rgba(255,255,255,0.4)"
+                strokeWidth="0.8"
+                style={{
+                  filter: `drop-shadow(0 0 6px ${col}) drop-shadow(0 0 12px ${col}88)`,
+                  animation: `twinkle 1.6s ease-in-out ${(i % 4) * 0.22}s infinite`,
+                }}
+              />
+              {/* specular highlight */}
+              <circle cx={bx - 1.5} cy={by - 1.5} r={1.8}
+                fill="rgba(255,255,255,0.6)" />
+            </g>
           );
         })}
 
-        {/* clickable neon hub */}
-        <circle cx={C} cy={C} r={23}
-          fill={`url(#${hubId})`}
-          stroke="rgba(255,46,154,0.7)"
+        {/* ── hub ── */}
+        <circle cx={C} cy={C} r={28}
+          fill="rgba(0,0,0,0.6)"
+          filter={`url(#${ids.shadow})`} />
+        <circle cx={C} cy={C} r={25}
+          fill={`url(#${ids.hub})`}
+          stroke="rgba(255,90,184,0.8)"
           strokeWidth="2"
           onClick={onHubClick}
           style={{
             cursor: spinning ? "default" : "pointer",
-            filter: "drop-shadow(0 0 10px rgba(255,46,154,0.8))",
+            filter: "drop-shadow(0 0 12px rgba(255,46,154,0.9)) drop-shadow(0 0 24px rgba(176,86,255,0.5))",
           }}
         />
+        {/* hub ring */}
+        <circle cx={C} cy={C} r={19}
+          fill="none"
+          stroke="rgba(255,255,255,0.2)"
+          strokeWidth="1"
+          style={{ pointerEvents: "none" }} />
         <text
-          x={C} y={C}
-          textAnchor="middle" dominantBaseline="middle"
-          fill="#fff" fontSize="9" fontWeight="800" letterSpacing="1.2"
-          style={{ fontFamily: "var(--font-sora,sans-serif)", pointerEvents: "none" }}
+          x={C} y={C - 1}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#fff"
+          fontSize="10"
+          fontWeight="900"
+          letterSpacing="1.5"
+          style={{
+            fontFamily: "var(--font-sora,sans-serif)",
+            pointerEvents: "none",
+            textShadow: "0 0 8px rgba(255,255,255,0.8)",
+          }}
         >
           SPIN
         </text>
 
-        {/* magenta triangle pointer */}
-        <g filter={`url(#${shadowId})`}>
-          <path d="M110,17 L101,37 L119,37 Z" fill="#ff2e9a" stroke="#fff" strokeWidth="1" />
-          <circle cx={110} cy={12} r={5.5} fill="#ff2e9a" stroke="#fff" strokeWidth="1"
-            style={{ filter: "drop-shadow(0 0 7px #ff2e9a)" }} />
+        {/* ── pointer ── */}
+        <g filter={`url(#${ids.shadow})`}>
+          {/* pointer body */}
+          <path d="M120,20 L109,44 L131,44 Z"
+            fill="#ff2e9a"
+            stroke="#fff"
+            strokeWidth="1.5"
+            strokeLinejoin="round" />
+          {/* pointer gem */}
+          <circle cx={120} cy={14} r={7}
+            fill="#ff2e9a"
+            stroke="#fff"
+            strokeWidth="1.5"
+            style={{ filter: "drop-shadow(0 0 8px #ff2e9a) drop-shadow(0 0 16px #ff2e9aaa)" }} />
+          {/* gem specular */}
+          <circle cx={118} cy={12} r={2.5}
+            fill="rgba(255,255,255,0.7)" />
         </g>
       </svg>
     </div>
   );
 }
 
-/* ── Main widget ─────────────────────────────────────────────── */
+/* ─── Main widget ──────────────────────────────────────────────── */
 export default function SpinWheelWidget() {
   const reduce  = useReducedMotion();
   const [open,     setOpen]     = useState(false);
@@ -179,12 +289,12 @@ export default function SpinWheelWidget() {
     setResult(null);
     setSpinning(true);
     sfxSpin();
-    const winner = Math.floor(Math.random() * PRIZES.length);
+    const winner = Math.floor(Math.random() * N);
     const target = 360 * 5 + (360 - winner * SEG - SEG / 2);
     setRotation(prev => prev - (prev % 360) + target);
     if (reduce) {
       setSpinning(false);
-      setResult(PRIZES[winner].label);
+      setResult(`${PRIZES[winner].label} ${PRIZES[winner].sub}`);
       sfxWin();
     }
   }
@@ -192,47 +302,45 @@ export default function SpinWheelWidget() {
   function handleComplete() {
     if (!spinning) return;
     setSpinning(false);
-    const idx = (PRIZES.length - Math.round(((rotation % 360) + SEG / 2) / SEG)) % PRIZES.length;
-    setResult(PRIZES[(idx + PRIZES.length) % PRIZES.length].label);
+    const idx = (N - Math.round(((rotation % 360) + SEG / 2) / SEG)) % N;
+    const p   = PRIZES[(idx + N) % N];
+    setResult(`${p.label} ${p.sub}`);
     sfxWin();
   }
 
-  function openModal() {
-    setResult(null);
-    setOpen(true);
-  }
+  function openModal() { setResult(null); setOpen(true); }
 
   return (
     <>
-      {/* ── PEEKING WHEEL (always visible, right edge) ──────── */}
+      {/* ── PEEKING WHEEL ──────────────────────────────────── */}
       <AnimatePresence>
         {!open && (
           <motion.div
             key="peek"
-            initial={{ x: 180 }}
-            animate={{ x: 90 }}
-            exit={{ x: 180, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 22, delay: 0.6 }}
+            initial={{ x: 200 }}
+            animate={{ x: 100 }}
+            exit={{ x: 200, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.8 }}
             onClick={openModal}
             aria-label="Open spin wheel"
             role="button"
             tabIndex={0}
             onKeyDown={e => e.key === "Enter" && openModal()}
-            className="fixed right-0 z-40 cursor-pointer"
-            style={{ top: "calc(50% - 90px)" }}
+            className="fixed right-0 z-40 cursor-pointer select-none"
+            style={{ top: "calc(50% - 100px)" }}
           >
-            {/* glow halo */}
+            {/* outer glow halo */}
             <div
               className="pointer-events-none absolute inset-0 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(255,46,154,0.5) 0%, rgba(176,86,255,0.35) 40%, transparent 70%)",
-                filter: "blur(18px)",
-                animation: "peek-pulse 3s ease-in-out infinite",
+                background: "radial-gradient(circle, rgba(255,46,154,0.55) 0%, rgba(176,86,255,0.3) 40%, transparent 70%)",
+                filter: "blur(22px)",
+                animation: "peek-pulse 2.8s ease-in-out infinite",
               }}
             />
 
             {/* wheel */}
-            <div className="relative h-[180px] w-[180px]">
+            <div className="relative h-[200px] w-[200px]">
               <WheelSVG
                 rotation={0}
                 spinning={false}
@@ -242,25 +350,39 @@ export default function SpinWheelWidget() {
               />
             </div>
 
-            {/* "TAP TO SPIN" label on visible edge */}
+            {/* TAP label on visible left edge */}
             <div
-              className="absolute left-2 top-1/2 -translate-y-1/2 -translate-x-1 flex flex-col items-center gap-1"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 flex flex-col items-center gap-1.5"
               style={{ pointerEvents: "none" }}
             >
-              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
-                <path d="M14 14H2M2 14L8 8M2 14L8 20" stroke="#ffc63d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              {/* arrow */}
+              <svg width="14" height="22" viewBox="0 0 14 22" fill="none">
+                <path d="M12 11H2M2 11L7 6M2 11L7 16"
+                  stroke="#ffc63d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span
-                className="block rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-white"
+              {/* "SPIN" badge */}
+              <div
                 style={{
-                  background: "linear-gradient(135deg,#ff2e9a,#b056ff)",
-                  boxShadow: "0 0 10px rgba(255,46,154,0.7)",
+                  background: "linear-gradient(180deg,#ff2e9a,#b056ff)",
+                  boxShadow: "0 0 12px rgba(255,46,154,0.8)",
                   writingMode: "vertical-rl",
-                  letterSpacing: "0.2em",
+                  borderRadius: "99px",
+                  padding: "6px 4px",
                 }}
               >
-                Spin
-              </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-sora,sans-serif)",
+                    fontWeight: 900,
+                    fontSize: "9px",
+                    letterSpacing: "0.18em",
+                    color: "#fff",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  SPIN
+                </span>
+              </div>
             </div>
           </motion.div>
         )}
@@ -270,56 +392,61 @@ export default function SpinWheelWidget() {
       <AnimatePresence>
         {open && (
           <>
-            {/* backdrop */}
             <motion.div
               key="bd"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.22 }}
-              className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm"
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
               onClick={() => !spinning && setOpen(false)}
             />
 
-            {/* panel — slides in from right */}
             <motion.div
               key="panel"
-              initial={{ opacity: 0, x: 80, scale: 0.92 }}
+              initial={{ opacity: 0, x: 80, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 80, scale: 0.92 }}
+              exit={{ opacity: 0, x: 80, scale: 0.9 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-[360px] -translate-y-1/2 rounded-3xl p-6"
+              className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-[380px] -translate-y-1/2 rounded-3xl p-5"
               style={{
-                background: "linear-gradient(145deg, #110826 0%, #0d0620 60%, #180830 100%)",
-                border: "1px solid rgba(255,46,154,0.25)",
-                boxShadow: "0 0 0 1px rgba(176,86,255,0.15), 0 40px 100px -20px rgba(255,46,154,0.5), inset 0 1px 0 rgba(255,255,255,0.07)",
+                background: "linear-gradient(155deg,#130828 0%,#0d0620 55%,#1a0834 100%)",
+                border: "1px solid rgba(255,46,154,0.2)",
+                boxShadow: [
+                  "0 0 0 1px rgba(176,86,255,0.15)",
+                  "0 40px 120px -20px rgba(255,46,154,0.55)",
+                  "inset 0 1px 0 rgba(255,255,255,0.08)",
+                ].join(","),
               }}
             >
               {/* header */}
-              <div className="mb-5 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#ff2e9a" }}>Daily Reward</p>
-                  <h2 className="font-display text-xl font-extrabold text-white">Spin a Wheel</h2>
+                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#ff2e9a" }}>
+                    Daily Reward
+                  </p>
+                  <h2 className="font-display text-xl font-extrabold text-white">
+                    Spin &amp; Win
+                  </h2>
                 </div>
                 <button
                   onClick={() => !spinning && setOpen(false)}
                   aria-label="Close spin wheel"
-                  className="grid h-9 w-9 cursor-pointer place-items-center rounded-full transition-colors"
-                  style={{ background: "rgba(255,255,255,0.08)" }}
+                  className="grid h-9 w-9 cursor-pointer place-items-center rounded-full transition-colors hover:bg-white/10"
+                  style={{ background: "rgba(255,255,255,0.07)" }}
                 >
                   <X className="h-4 w-4 text-white/60" />
                 </button>
               </div>
 
               {/* wheel */}
-              <div className="relative mx-auto h-[260px] w-[260px]">
-                {/* glow */}
+              <div className="relative mx-auto h-[280px] w-[280px]">
                 <div
                   className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-500"
                   style={{
-                    background: "radial-gradient(circle, rgba(255,46,154,0.4), rgba(176,86,255,0.3) 45%, transparent 70%)",
-                    filter: "blur(20px)",
-                    opacity: spinning ? 0.9 : 0.5,
+                    background: "radial-gradient(circle, rgba(255,46,154,0.45), rgba(176,86,255,0.3) 45%, transparent 70%)",
+                    filter: "blur(24px)",
+                    opacity: spinning ? 1 : 0.55,
                   }}
                 />
                 <WheelSVG
@@ -332,23 +459,27 @@ export default function SpinWheelWidget() {
                 />
               </div>
 
-              {/* result / CTA */}
-              <div className="mt-6 text-center">
+              {/* CTA / result */}
+              <div className="mt-5 text-center">
                 <AnimatePresence mode="wait">
                   {result ? (
                     <motion.div
-                      key="result"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      key="win"
+                      initial={{ opacity: 0, scale: 0.85 }}
+                      animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
-                      <p className="font-display text-2xl font-extrabold" style={{ color: "#ffc63d", textShadow: "0 0 20px #ffc63daa" }}>
+                      <p
+                        className="font-display text-2xl font-extrabold uppercase tracking-wide"
+                        style={{ color: "#ffc63d", textShadow: "0 0 24px #ffc63d, 0 0 48px #ffc63d66" }}
+                      >
                         You won {result}!
                       </p>
-                      <p className="mt-1 text-sm text-white/50">Prize added to your account</p>
+                      <p className="mt-1 text-xs text-white/40">Prize added to your account</p>
                       <button
                         onClick={() => setResult(null)}
-                        className="mt-4 text-xs text-white/30 underline-offset-2 hover:text-white/60 hover:underline cursor-pointer transition-colors"
+                        className="mt-4 cursor-pointer text-xs text-white/30 underline-offset-2 transition-colors hover:text-white/60 hover:underline"
                       >
                         Come back tomorrow for another spin
                       </button>
@@ -358,15 +489,15 @@ export default function SpinWheelWidget() {
                       <button
                         onClick={spin}
                         disabled={spinning}
-                        className="w-full cursor-pointer rounded-2xl py-3.5 font-display text-base font-extrabold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full cursor-pointer rounded-2xl py-4 font-display text-base font-extrabold uppercase tracking-wide text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
                         style={{
                           background: "linear-gradient(135deg,#ff2e9a,#b056ff)",
-                          boxShadow: "0 8px 28px -8px rgba(255,46,154,0.7)",
+                          boxShadow: "0 8px 32px -8px rgba(255,46,154,0.8), inset 0 1px 0 rgba(255,255,255,0.2)",
                         }}
                       >
                         {spinning ? "Spinning…" : "Spin the Wheel"}
                       </button>
-                      <p className="mt-3 text-xs text-white/35">
+                      <p className="mt-3 text-[11px] text-white/30">
                         One free spin per day · No purchase necessary
                       </p>
                     </motion.div>
@@ -380,8 +511,8 @@ export default function SpinWheelWidget() {
 
       <style>{`
         @keyframes peek-pulse {
-          0%, 100% { opacity: 0.6; }
-          50%       { opacity: 1; }
+          0%,100% { opacity:0.55; transform:scale(1);   }
+          50%      { opacity:1;    transform:scale(1.04); }
         }
       `}</style>
     </>
