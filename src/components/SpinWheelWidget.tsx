@@ -46,7 +46,7 @@ function CoinAt({ cx, cy, color, r = 7 }: { cx: number; cy: number; color: strin
 
 /* ─── Shared wheel graphic ─────────────────────────────────────── */
 function WheelSVG({
-  rotation, onAnimationComplete, onHubClick, spinning, idSuffix, reduce,
+  rotation, onAnimationComplete, onHubClick, spinning, idSuffix, reduce, idle = false,
 }: {
   rotation: number;
   onAnimationComplete?: () => void;
@@ -54,6 +54,7 @@ function WheelSVG({
   spinning: boolean;
   idSuffix: string;
   reduce: boolean | null;
+  idle?: boolean;
 }) {
   const ids = {
     gold:    `gold-${idSuffix}`,
@@ -70,8 +71,14 @@ function WheelSVG({
       <motion.svg
         viewBox="0 0 240 240"
         className="absolute inset-0 h-full w-full"
-        animate={{ rotate: rotation }}
-        transition={reduce ? { duration: 0 } : { duration: 4.8, ease: [0.16, 1, 0.3, 1] }}
+        animate={idle && !reduce ? { rotate: 360 } : { rotate: rotation }}
+        transition={
+          idle && !reduce
+            ? { repeat: Infinity, ease: "linear", duration: 18 }
+            : reduce
+              ? { duration: 0 }
+              : { duration: 4.8, ease: [0.16, 1, 0.3, 1] }
+        }
         onAnimationComplete={onAnimationComplete}
       >
         <defs>
@@ -200,14 +207,14 @@ function WheelSVG({
               {/* shadow base */}
               <circle cx={bx} cy={by} r={6.5}
                 fill="rgba(0,0,0,0.5)" />
-              {/* coloured bulb */}
+              {/* coloured bulb — light chases around the rim */}
               <circle cx={bx} cy={by} r={5.5}
                 fill={col}
                 stroke="rgba(255,255,255,0.4)"
                 strokeWidth="0.8"
                 style={{
                   filter: `drop-shadow(0 0 6px ${col}) drop-shadow(0 0 12px ${col}88)`,
-                  animation: `twinkle 1.6s ease-in-out ${(i % 4) * 0.22}s infinite`,
+                  animation: `bulb-chase 1.8s linear ${(i / BULBS) * 1.8}s infinite`,
                 }}
               />
               {/* specular highlight */}
@@ -254,8 +261,15 @@ function WheelSVG({
           SPIN
         </text>
 
-        {/* ── pointer ── */}
-        <g filter={`url(#${ids.shadow})`}>
+        {/* ── pointer (flaps against the pegs while spinning) ── */}
+        <g
+          filter={`url(#${ids.shadow})`}
+          style={{
+            transformBox: "view-box",
+            transformOrigin: "120px 22px",
+            animation: spinning ? "pointer-tick 0.09s steps(2,end) infinite" : undefined,
+          }}
+        >
           {/* pointer body */}
           <path d="M120,20 L109,44 L131,44 Z"
             fill="#ff2e9a"
@@ -273,6 +287,69 @@ function WheelSVG({
             fill="rgba(255,255,255,0.7)" />
         </g>
       </svg>
+    </div>
+  );
+}
+
+/* ─── Win celebration: gold coin-burst ─────────────────────────── */
+function CoinChip() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
+      <circle cx="10" cy="10" r="9" fill="#b8860b" />
+      <circle cx="10" cy="10" r="8" fill="#ffc63d" stroke="#fff2c0" strokeWidth="0.8" />
+      <circle cx="10" cy="10" r="5" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1" />
+      {/* specular highlight */}
+      <circle cx="7" cy="6.5" r="2.4" fill="rgba(255,255,255,0.6)" />
+      <text x="10" y="13.5" textAnchor="middle" fontSize="9" fontWeight="900" fill="#7a4a00">$</text>
+    </svg>
+  );
+}
+
+function CoinBurst() {
+  const coins = Array.from({ length: 16 });
+  return (
+    <div className="pointer-events-none absolute inset-0 z-20 overflow-visible">
+      {/* radial gold flash */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(255,198,61,0.75), transparent 68%)" }}
+        initial={{ scale: 0.2, opacity: 0.95 }}
+        animate={{ scale: 2.6, opacity: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+      />
+      {/* expanding ring */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
+        style={{ borderColor: "rgba(255,198,61,0.9)" }}
+        initial={{ scale: 0.3, opacity: 0.9 }}
+        animate={{ scale: 2.4, opacity: 0 }}
+        transition={{ duration: 0.65, ease: "easeOut" }}
+      />
+      {/* flying coins with a slight gravity arc */}
+      {coins.map((_, i) => {
+        const ang = (i / 16) * Math.PI * 2 + Math.random() * 0.3;
+        const dist = 95 + Math.random() * 55;
+        const x = Math.cos(ang) * dist;
+        const y = Math.sin(ang) * dist;
+        return (
+          <motion.div
+            key={i}
+            className="absolute left-1/2 top-1/2"
+            style={{ marginLeft: -10, marginTop: -10 }}
+            initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
+            animate={{
+              x,
+              y: [0, y - 24, y + 34],
+              scale: [0, 1.1, 0.85],
+              opacity: [1, 1, 0],
+              rotate: Math.random() * 540 - 270,
+            }}
+            transition={{ duration: 1 + Math.random() * 0.5, ease: "easeOut" }}
+          >
+            <CoinChip />
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
@@ -330,13 +407,14 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
             className="fixed right-0 z-40 cursor-pointer select-none"
             style={{ top: "calc(50% - 75px)" }}
           >
-            {/* outer glow halo */}
+            {/* outer glow halo — warm gold core + neon violet aura */}
             <div
-              className="pointer-events-none absolute inset-0 rounded-full"
+              className="pointer-events-none absolute -inset-6 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(255,46,154,0.55) 0%, rgba(176,86,255,0.3) 40%, transparent 70%)",
-                filter: "blur(22px)",
-                animation: "peek-pulse 2.8s ease-in-out infinite",
+                background:
+                  "radial-gradient(circle, rgba(255,198,61,0.5) 0%, rgba(255,46,154,0.4) 32%, rgba(176,86,255,0.28) 55%, transparent 72%)",
+                filter: "blur(26px)",
+                animation: "peek-pulse 2.6s ease-in-out infinite",
               }}
             />
 
@@ -348,6 +426,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
                 onHubClick={openModal}
                 idSuffix="peek"
                 reduce={reduce}
+                idle
               />
             </div>
 
@@ -458,6 +537,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
                   idSuffix="modal"
                   reduce={reduce}
                 />
+                {result && !reduce && <CoinBurst key={result} />}
               </div>
 
               {/* CTA / result */}
@@ -546,7 +626,18 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
       <style>{`
         @keyframes peek-pulse {
           0%,100% { opacity:0.55; transform:scale(1);   }
-          50%      { opacity:1;    transform:scale(1.04); }
+          50%      { opacity:1;    transform:scale(1.06); }
+        }
+        @keyframes bulb-chase {
+          0%       { opacity:0.35; }
+          6%       { opacity:1;    }
+          18%      { opacity:0.35; }
+          100%     { opacity:0.35; }
+        }
+        @keyframes pointer-tick {
+          0%   { transform: rotate(0deg);  }
+          50%  { transform: rotate(-8deg); }
+          100% { transform: rotate(0deg);  }
         }
       `}</style>
     </>
