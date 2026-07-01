@@ -5,6 +5,7 @@ import GamesMarquee from "@/components/GamesMarquee";
 import LiveCount from "@/components/LiveCount";
 import PaymentStrip from "@/components/PaymentStrip";
 import WinnerMarquee from "@/components/WinnerMarquee";
+import WinnersTable from "@/components/WinnersTable";
 import JackpotTicker from "@/components/JackpotTicker";
 import FortuneWheel from "@/components/FortuneWheel";
 import { GAMES, PROMOS } from "@/lib/data";
@@ -173,6 +174,13 @@ export default function Home() {
             </Reveal>
           ))}
         </div>
+      </section>
+
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ WINNERS TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <section className="px-4 py-14">
+        <Reveal>
+          <WinnersTable />
+        </Reveal>
       </section>
 
       {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
