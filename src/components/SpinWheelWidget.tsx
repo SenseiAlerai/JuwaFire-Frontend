@@ -318,9 +318,9 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
         {!open && (
           <motion.div
             key="peek"
-            initial={{ x: 200 }}
-            animate={{ x: 100 }}
-            exit={{ x: 200, opacity: 0 }}
+            initial={{ x: 150 }}
+            animate={{ x: 75 }}
+            exit={{ x: 150, opacity: 0 }}
             transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.8 }}
             onClick={openModal}
             aria-label="Open spin wheel"
@@ -328,7 +328,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
             tabIndex={0}
             onKeyDown={e => e.key === "Enter" && openModal()}
             className="fixed right-0 z-40 cursor-pointer select-none"
-            style={{ top: "calc(50% - 100px)" }}
+            style={{ top: "calc(50% - 75px)" }}
           >
             {/* outer glow halo */}
             <div
@@ -341,7 +341,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
             />
 
             {/* wheel */}
-            <div className="relative h-[200px] w-[200px]">
+            <div className="relative h-[150px] w-[150px]">
               <WheelSVG
                 rotation={0}
                 spinning={false}
