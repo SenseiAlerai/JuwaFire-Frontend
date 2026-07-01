@@ -278,7 +278,7 @@ export default function Home() {
             <div className="relative">
               <div className="mb-4 flex flex-wrap justify-center gap-2 text-sm font-semibold">
                 <span className="neon-chip flex items-center gap-1 rounded-full px-3 py-1">
-                  <ShieldCheck className="h-4 w-4 text-lime" /> Licensed &amp; Fair
+                  <ShieldCheck className="h-4 w-4 text-lime" /> Secure &amp; Fair
                 </span>
                 <span className="neon-chip flex items-center gap-1 rounded-full px-3 py-1">
                   <Zap className="h-4 w-4 text-gold" /> 3-min payouts
