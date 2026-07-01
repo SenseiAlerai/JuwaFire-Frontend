@@ -6,8 +6,12 @@ import { db } from "@/db";
 import { users, transactions } from "@/db/schema";
 import { formatUSD } from "@/lib/wallet";
 import WalletActions from "@/components/dashboard/WalletActions";
-import { GAMES } from "@/lib/data";
-import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles } from "lucide-react";
+import { GAMES, VIP_TIERS } from "@/lib/data";
+import { iconMap } from "@/lib/iconMap";
+import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles, Zap } from "lucide-react";
+
+/* voltage thresholds to reach each VIP tier (index-aligned with VIP_TIERS) */
+const TIER_VOLTAGE = [0, 300, 900, 2200, 5000];
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +37,19 @@ export default async function DashboardPage() {
   });
 
   const greeting = me.username || me.name || "player";
+
+  // Gamified VIP "voltage" — derived from wallet activity, stable per render.
+  const voltage = Math.floor(me.balanceCents / 100) * 3 + 120;
+  let tierIdx = 0;
+  for (let i = 0; i < TIER_VOLTAGE.length; i++) if (voltage >= TIER_VOLTAGE[i]) tierIdx = i;
+  const tier = VIP_TIERS[tierIdx];
+  const TierIcon = iconMap[tier.icon];
+  const isMax = tierIdx >= VIP_TIERS.length - 1;
+  const nextTier = isMax ? null : VIP_TIERS[tierIdx + 1];
+  const floor = TIER_VOLTAGE[tierIdx];
+  const ceil = isMax ? voltage : TIER_VOLTAGE[tierIdx + 1];
+  const pct = isMax ? 100 : Math.min(100, Math.round(((voltage - floor) / (ceil - floor)) * 100));
+  const toGo = isMax ? 0 : ceil - voltage;
 
   return (
     <div className="px-4 pt-10">
@@ -64,6 +81,61 @@ export default async function DashboardPage() {
 
           {/* Actions */}
           <WalletActions balanceCents={me.balanceCents} games={GAMES.map((g) => g.name)} />
+        </div>
+
+        {/* VIP progress */}
+        <div className="candy-card mt-6 overflow-hidden rounded-[2rem] p-6 sm:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl"
+                style={{ background: `${tier.color}26`, boxShadow: `0 0 24px ${tier.color}55` }}
+              >
+                <TierIcon className="h-6 w-6" style={{ color: tier.color }} />
+              </span>
+              <div>
+                <p className="font-display text-xs font-bold uppercase tracking-widest text-ink-soft">
+                  VIP Tier {tierIdx + 1}
+                </p>
+                <h3 className="font-display text-xl font-extrabold" style={{ color: tier.color }}>
+                  {tier.name}
+                </h3>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 font-display font-bold text-gold">
+              <Zap className="h-4 w-4" />
+              {voltage.toLocaleString("en-US")} voltage
+            </div>
+          </div>
+
+          {/* progress bar */}
+          <div className="mt-5">
+            <div className="mb-1.5 flex items-center justify-between text-xs font-semibold text-ink-soft">
+              <span>{tier.name}</span>
+              <span>{nextTier ? nextTier.name : "Max tier"}</span>
+            </div>
+            <div className="h-3 w-full overflow-hidden rounded-full bg-white/8">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${pct}%`,
+                  background: `linear-gradient(90deg, ${tier.color}, ${nextTier ? nextTier.color : "#ffc63d"})`,
+                  boxShadow: `0 0 16px ${tier.color}aa`,
+                }}
+              />
+            </div>
+            <p className="mt-2 text-sm text-ink-soft">
+              {isMax ? (
+                <>You&apos;ve reached the top — <span className="font-bold text-gold">{tier.name}</span> perks unlocked.</>
+              ) : (
+                <>
+                  <span className="font-bold text-ink">{toGo.toLocaleString("en-US")} voltage</span> to{" "}
+                  <span className="font-bold" style={{ color: nextTier!.color }}>{nextTier!.name}</span>{" "}
+                  — keep playing to climb.
+                </>
+              )}
+            </p>
+          </div>
         </div>
 
         {/* Quick links to play */}
