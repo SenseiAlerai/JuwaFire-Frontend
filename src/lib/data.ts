@@ -105,14 +105,14 @@ export const VIP_TIERS: VipTier[] = [
 ];
 
 export const WINNERS = [
-  { name: "Mia R.", game: "Fire Kirin", amount: "$12,480" },
-  { name: "Leo K.", game: "Juwa", amount: "$3,210" },
-  { name: "Ava P.", game: "Orion Stars", amount: "$8,750" },
-  { name: "Noah B.", game: "Panda Master", amount: "$5,120" },
-  { name: "Zoe T.", game: "Game Vault", amount: "$2,090" },
-  { name: "Eli M.", game: "Milkyway", amount: "$6,640" },
-  { name: "Ivy S.", game: "Cash Frenzy", amount: "$1,870" },
-  { name: "Max W.", game: "Ultra Panda", amount: "$9,300" },
+  { name: "Mia****", game: "Fire Kirin", amount: "12,480 SC" },
+  { name: "Leo****", game: "Juwa", amount: "3,210 SC" },
+  { name: "Ava****", game: "Orion Stars", amount: "8,750 SC" },
+  { name: "Noa****", game: "Panda Master", amount: "5,120 SC" },
+  { name: "Zoe****", game: "Game Vault", amount: "2,090 SC" },
+  { name: "Eli****", game: "Milkyway", amount: "6,640 SC" },
+  { name: "Ivy****", game: "Cash Frenzy", amount: "1,870 SC" },
+  { name: "Max****", game: "Ultra Panda", amount: "9,300 SC" },
 ];
 
 

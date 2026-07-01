@@ -7,9 +7,9 @@ import { sfxWin } from "@/lib/sound";
 // Simulated live floor activity — winners pop in periodically so the room
 // always feels populated. Fabricated (like the static winner ticker).
 const NAMES = [
-  "Jordan M.", "Tasha R.", "Kevin P.", "Aaliyah B.", "Marcus T.", "Destiny W.",
-  "Carlos G.", "Brianna L.", "Devin K.", "Sophia N.", "Tyler J.", "Imani S.",
-  "Andre F.", "Chloe D.", "Malik H.", "Gabby V.",
+  "Jor****", "Tas****", "Kev****", "Aal****", "Mar****", "Des****",
+  "Car****", "Bri****", "Dev****", "Sop****", "Tyl****", "Ima****",
+  "And****", "Chl****", "Mal****", "Gab****",
 ];
 const GAMESPOOL = [
   "Juwa", "Fire Kirin", "Orion Stars", "Game Vault", "Panda Master",
@@ -26,8 +26,8 @@ export default function LiveActivity() {
 
     function fire() {
       const amount = (Math.floor(Math.random() * 95) + 5) * 100 + Math.floor(Math.random() * 90);
-      const usd = amount.toLocaleString("en-US");
-      toast(`${rand(NAMES)} won $${usd} on ${rand(GAMESPOOL)}`, "win");
+      const sc = amount.toLocaleString("en-US");
+      toast(`${rand(NAMES)} won ${sc} SC on ${rand(GAMESPOOL)}`, "win");
       sfxWin();
       schedule();
     }
