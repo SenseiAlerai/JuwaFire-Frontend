@@ -9,7 +9,7 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
-import { Play } from "lucide-react";
+import { UserPlus, LogIn } from "lucide-react";
 import type { Game } from "@/lib/data";
 
 export default function GameCard({
@@ -22,7 +22,7 @@ export default function GameCard({
   noReveal?: boolean;
 }) {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -41,11 +41,8 @@ export default function GameCard({
   }
 
   return (
-    <motion.a
+    <motion.div
       ref={ref}
-      href={game.url}
-      target="_blank"
-      rel="noopener noreferrer"
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       initial={noReveal ? false : { opacity: 0, y: 24 }}
@@ -53,10 +50,8 @@ export default function GameCard({
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45, delay: (index % 6) * 0.05, ease: [0.34, 1.56, 0.64, 1] }}
       whileHover={reduce ? undefined : { y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className="group relative block aspect-[3/4] w-full cursor-pointer rounded-2xl [transform-style:preserve-3d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
-      aria-label={`Play ${game.name}`}
+      className="group relative block aspect-[3/4] w-full rounded-2xl [transform-style:preserve-3d]"
     >
       {/* accent glow that blooms on hover */}
       <span
@@ -73,7 +68,7 @@ export default function GameCard({
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {/* readability gradient */}
-        <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/25" />
+        <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/25" />
         {/* sheen sweep */}
         <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,0.22)_50%,transparent_65%)] bg-[length:200%_100%] [background-position:200%_0] transition-[background-position] duration-700 group-hover:[background-position:-200%_0]" />
 
@@ -91,7 +86,10 @@ export default function GameCard({
         </span>
 
         {/* title block */}
-        <span className="absolute inset-x-0 bottom-0 p-3.5" style={{ transform: "translateZ(18px)" }}>
+        <span
+          className="absolute inset-x-0 bottom-0 p-3.5 transition-transform duration-300 md:group-hover:-translate-y-14"
+          style={{ transform: "translateZ(18px)" }}
+        >
           <span className="block font-display text-base font-bold leading-tight text-white drop-shadow sm:text-lg">
             {game.name}
           </span>
@@ -104,11 +102,33 @@ export default function GameCard({
           </span>
         </span>
 
-        {/* play button on hover */}
-        <span className="absolute bottom-3.5 right-3.5 z-10 grid h-11 w-11 translate-y-3 place-items-center rounded-full bg-white text-[#12081f] opacity-0 shadow-[0_0_24px_rgba(255,255,255,0.75)] transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          <Play className="h-5 w-5 fill-current" />
+        {/* dual CTA — always visible on mobile, hover/focus reveal on desktop */}
+        <span
+          className="absolute inset-x-2.5 bottom-2.5 z-10 grid grid-cols-2 gap-1.5 transition-all duration-300 md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100"
+          style={{ transform: "translateZ(24px)" }}
+        >
+          <a
+            href={game.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Sign up free on ${game.name}`}
+            className="flex items-center justify-center gap-1 rounded-xl bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] py-2 text-[11px] font-bold text-white shadow-[0_6px_18px_-6px_rgba(255,46,154,0.9)] transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
+          >
+            <UserPlus className="h-3.5 w-3.5" />
+            Sign Up
+          </a>
+          <a
+            href={game.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Existing user login on ${game.name}`}
+            className="flex items-center justify-center gap-1 rounded-xl border border-white/25 bg-white/10 py-2 text-[11px] font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
+          >
+            <LogIn className="h-3.5 w-3.5" />
+            Log In
+          </a>
         </span>
       </span>
-    </motion.a>
+    </motion.div>
   );
 }
