@@ -10,7 +10,7 @@ import JackpotTicker from "@/components/JackpotTicker";
 import FortuneWheel from "@/components/FortuneWheel";
 import { GAMES, PROMOS } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
-import { Ticket, Gift, Zap, ShieldCheck, Star } from "lucide-react";
+import { Ticket, Gift, Zap, ShieldCheck, Star, Headphones, Clock, Crown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -18,6 +18,13 @@ const STEPS = [
   { icon: Ticket, title: "Grab Your Pass", text: "Sign up in 30 seconds â€” no fuss, just the floor.", color: "#ff2e9a" },
   { icon: Gift, title: "Claim 100% Bonus", text: "Your first deposit gets doubled. Walk in loaded.", color: "#b056ff" },
   { icon: Zap, title: "Play & Cash Out", text: "Spin, deal, crash â€” payouts hit in 3 minutes flat.", color: "#aaff3c" },
+];
+
+const TRUST = [
+  { icon: ShieldCheck, title: "Safe & Secure", text: "Protected payments you can trust.", color: "#2de2ff" },
+  { icon: Headphones, title: "24/7 Support", text: "Always here when you need us.", color: "#ff2e9a" },
+  { icon: Clock, title: "Same-Day Redemption", text: "Fast, easy cashouts.", color: "#aaff3c" },
+  { icon: Crown, title: "Loyalty Club", text: "Unlock exclusive perks & rewards.", color: "#ffc63d" },
 ];
 
 const STATS = [
@@ -181,6 +188,43 @@ export default function Home() {
         <Reveal>
           <WinnersTable />
         </Reveal>
+      </section>
+
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ WHY PLAYERS CHOOSE US â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <section className="px-4 py-12">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <div className="text-center">
+              <p className="font-display text-sm font-bold uppercase tracking-widest text-magenta">
+                Trusted Platform
+              </p>
+              <h2 className="mt-1 font-display text-3xl font-extrabold text-ink sm:text-4xl">
+                Why Players <span className="text-magenta">Choose Us</span>
+              </h2>
+              <p className="mx-auto mt-2 max-w-xl text-ink-soft">
+                Everything you need for secure play, fast redeems, and real rewards.
+              </p>
+            </div>
+          </Reveal>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+            {TRUST.map((t, i) => (
+              <Reveal key={t.title} delay={i * 0.06}>
+                <div className="candy-card group h-full rounded-2xl p-5 text-center transition-transform hover:-translate-y-1 sm:p-6">
+                  <span
+                    className="mx-auto grid h-14 w-14 place-items-center rounded-2xl text-white transition-transform group-hover:scale-110"
+                    style={{ background: t.color, boxShadow: `0 0 26px ${t.color}66` }}
+                  >
+                    <t.icon className="h-7 w-7" />
+                  </span>
+                  <h3 className="mt-4 font-display text-base font-bold text-ink sm:text-lg">
+                    {t.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-ink-soft">{t.text}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
