@@ -1,12 +1,29 @@
 ﻿"use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { Gift } from "lucide-react";
 import { CandyButton } from "@/components/CandyButton";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AuthShell, { Field, Divider } from "@/components/auth/AuthShell";
+
+function PrizeBanner() {
+  const prize = useSearchParams().get("prize");
+  if (!prize) return null;
+  return (
+    <div className="mb-5 flex items-center gap-3 rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,#ffd64d,#ff9a2f)] text-[#1a0e02]">
+        <Gift className="h-5 w-5" />
+      </span>
+      <p className="text-sm font-semibold text-ink">
+        You won <span className="font-extrabold text-gold">{prize}</span>! Finish signing up to
+        claim it.
+      </p>
+    </div>
+  );
+}
 
 export default function SignupPage() {
   const router = useRouter();
@@ -59,6 +76,9 @@ export default function SignupPage() {
         </>
       }
     >
+      <Suspense fallback={null}>
+        <PrizeBanner />
+      </Suspense>
       <GoogleButton label="Sign up with Google" />
       <Divider />
       <form onSubmit={onSubmit} className="space-y-4">

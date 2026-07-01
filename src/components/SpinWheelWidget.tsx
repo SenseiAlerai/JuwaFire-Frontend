@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 import { sfxSpin, sfxWin } from "@/lib/sound";
 
 /* ─── Prize data ───────────────────────────────────────────────── */
@@ -277,7 +278,7 @@ function WheelSVG({
 }
 
 /* ─── Main widget ──────────────────────────────────────────────── */
-export default function SpinWheelWidget() {
+export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boolean }) {
   const reduce  = useReducedMotion();
   const [open,     setOpen]     = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -476,13 +477,46 @@ export default function SpinWheelWidget() {
                       >
                         You won {result}!
                       </p>
-                      <p className="mt-1 text-xs text-white/40">Prize added to your account</p>
-                      <button
-                        onClick={() => setResult(null)}
-                        className="mt-4 cursor-pointer text-xs text-white/30 underline-offset-2 transition-colors hover:text-white/60 hover:underline"
-                      >
-                        Come back tomorrow for another spin
-                      </button>
+
+                      {loggedIn ? (
+                        <>
+                          <p className="mt-1 text-xs text-white/40">Prize added to your account</p>
+                          <button
+                            onClick={() => setResult(null)}
+                            className="mt-4 cursor-pointer text-xs text-white/30 underline-offset-2 transition-colors hover:text-white/60 hover:underline"
+                          >
+                            Come back tomorrow for another spin
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-xs text-white/50">
+                            Create a free account to claim it
+                          </p>
+                          <Link
+                            href={`/signup?prize=${encodeURIComponent(result)}`}
+                            onClick={() => setOpen(false)}
+                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-display text-base font-extrabold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+                            style={{
+                              background: "linear-gradient(135deg,#ff2e9a,#b056ff)",
+                              boxShadow: "0 8px 32px -8px rgba(255,46,154,0.8), inset 0 1px 0 rgba(255,255,255,0.2)",
+                            }}
+                          >
+                            <Sparkles className="h-4 w-4" />
+                            Claim My Prize
+                          </Link>
+                          <p className="mt-3 text-[11px] text-white/40">
+                            Already a member?{" "}
+                            <Link
+                              href="/login"
+                              onClick={() => setOpen(false)}
+                              className="font-bold text-magenta hover:text-cyan"
+                            >
+                              Log in
+                            </Link>
+                          </p>
+                        </>
+                      )}
                     </motion.div>
                   ) : (
                     <motion.div key="cta" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

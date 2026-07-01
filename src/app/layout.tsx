@@ -51,7 +51,7 @@ export default async function RootLayout({
         <BottomNav />
         <Toaster />
         <SoundToggle />
-        <SpinWheelWidget />
+        <SpinWheelWidget loggedIn={!!session?.user} />
         <SupportButton />
         <LiveActivity />
       </body>
