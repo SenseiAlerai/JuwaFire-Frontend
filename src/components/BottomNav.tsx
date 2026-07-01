@@ -3,16 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Wallet, MessageCircle, User, Menu as MenuIcon } from "lucide-react";
+import { Home, Wallet, Gamepad2, User, Menu as MenuIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 import MenuSheet from "./MenuSheet";
-import ChatSheet from "./ChatSheet";
 
 const ITEMS = [
   { key: "menu", label: "Menu", icon: MenuIcon },
   { key: "wallet", href: "/dashboard", label: "Wallet", icon: Wallet },
   { key: "home", href: "/", label: "Home", icon: Home, center: true },
-  { key: "chat", label: "Chat", icon: MessageCircle },
+  { key: "games", href: "/games", label: "Games", icon: Gamepad2 },
   { key: "profile", href: "/profile", label: "Profile", icon: User },
 ] as const;
 
@@ -20,7 +19,6 @@ const ITEMS = [
 export default function BottomNav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <>
@@ -69,20 +67,6 @@ export default function BottomNav() {
               );
             }
 
-            if (item.key === "chat") {
-              return (
-                <button
-                  key={item.key}
-                  onClick={() => setChatOpen(true)}
-                  aria-label={item.label}
-                  className="flex flex-1 flex-col items-center gap-1 rounded-2xl py-2 text-ink-soft transition-colors active:scale-95"
-                >
-                  <Icon className="h-6 w-6" />
-                  <span className="text-[11px] font-semibold">{item.label}</span>
-                </button>
-              );
-            }
-
             return (
               <Link
                 key={item.key}
@@ -103,7 +87,6 @@ export default function BottomNav() {
       </nav>
 
       <MenuSheet open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <ChatSheet open={chatOpen} onClose={() => setChatOpen(false)} />
     </>
   );
 }
