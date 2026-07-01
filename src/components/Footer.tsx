@@ -3,9 +3,33 @@ import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 
 const COLS = [
-  { title: "Play", links: ["Slots", "Live Casino", "Jackpots", "Crash Games"] },
-  { title: "Rewards", links: ["Promotions", "VIP Club", "Tournaments", "Refer a Friend"] },
-  { title: "Help", links: ["Support", "Payments", "Responsible Play", "FAQ"] },
+  {
+    title: "Play",
+    links: [
+      { label: "All Games", href: "/games" },
+      { label: "Slots", href: "/games" },
+      { label: "Fish Games", href: "/games" },
+      { label: "Jackpots", href: "/games" },
+    ],
+  },
+  {
+    title: "Rewards",
+    links: [
+      { label: "Promotions", href: "/promotions" },
+      { label: "VIP Club", href: "/vip" },
+      { label: "Daily Wheel", href: "/promotions" },
+      { label: "Refer a Friend", href: "/promotions" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { label: "Support", href: "/profile" },
+      { label: "Payments", href: "/promotions" },
+      { label: "Responsible Play", href: "/promotions" },
+      { label: "Sign Up", href: "/signup" },
+    ],
+  },
 ];
 
 export default function Footer() {
@@ -32,9 +56,12 @@ export default function Footer() {
               <h4 className="font-display font-bold text-ink">{col.title}</h4>
               <ul className="mt-3 space-y-2">
                 {col.links.map((l) => (
-                  <li key={l}>
-                    <Link href="#" className="text-ink-soft transition-colors hover:text-magenta">
-                      {l}
+                  <li key={l.label}>
+                    <Link
+                      href={l.href}
+                      className="text-ink-soft transition-colors hover:text-magenta"
+                    >
+                      {l.label}
                     </Link>
                   </li>
                 ))}

@@ -115,7 +115,7 @@ export default function SignupPage() {
           <p className="rounded-xl bg-red/15 px-3 py-2 text-sm font-semibold text-red">{error}</p>
         )}
         <CandyButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
-          {loading ? "Creating accountâ€¦" : "Create Account"}
+          {loading ? "Creating account…" : "Create Account"}
         </CandyButton>
         <p className="text-center text-xs text-ink-soft">
           By joining you confirm you&apos;re 18+ and accept the Terms &amp; Responsible Play policy.

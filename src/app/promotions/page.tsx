@@ -5,14 +5,14 @@ import { PROMOS } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
 
 export const metadata: Metadata = {
-  title: "Promotions â€” JuwaFire",
+  title: "Promotions — JuwaFire",
   description: "Daily wheel spins, welcome bonuses, cashback and happy-hour jackpots.",
 };
 
 const FAQ = [
   {
     q: "How do I claim the welcome bonus?",
-    a: "Just sign up and make your first deposit â€” the 100% match and free spins land in your wallet automatically.",
+    a: "Just sign up and make your first deposit — the 100% match and free spins land in your wallet automatically.",
   },
   {
     q: "Can I spin the wheel more than once a day?",
@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Do bonuses have wagering requirements?",
-    a: "Yes â€” a friendly 20x on bonus funds, one of the lowest on the strip. Full terms on each offer.",
+    a: "Yes — a friendly 20x on bonus funds, one of the lowest on the strip. Full terms on each offer.",
   },
 ];
 

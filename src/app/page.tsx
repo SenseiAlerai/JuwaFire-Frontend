@@ -7,7 +7,6 @@ import PaymentStrip from "@/components/PaymentStrip";
 import WinnerMarquee from "@/components/WinnerMarquee";
 import WinnersTable from "@/components/WinnersTable";
 import JackpotTicker from "@/components/JackpotTicker";
-import FortuneWheel from "@/components/FortuneWheel";
 import { GAMES, PROMOS } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
 import { Ticket, Gift, Zap, ShieldCheck, Star, Headphones, Clock, Crown } from "lucide-react";
@@ -15,9 +14,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 const STEPS = [
-  { icon: Ticket, title: "Grab Your Pass", text: "Sign up in 30 seconds â€” no fuss, just the floor.", color: "#ff2e9a" },
+  { icon: Ticket, title: "Grab Your Pass", text: "Sign up in 30 seconds — no fuss, just the floor.", color: "#ff2e9a" },
   { icon: Gift, title: "Claim 100% Bonus", text: "Your first deposit gets doubled. Walk in loaded.", color: "#b056ff" },
-  { icon: Zap, title: "Play & Cash Out", text: "Spin, deal, crash â€” payouts hit in 3 minutes flat.", color: "#aaff3c" },
+  { icon: Zap, title: "Play & Cash Out", text: "Spin, deal, crash — payouts hit in 3 minutes flat.", color: "#aaff3c" },
 ];
 
 const TRUST = [
@@ -52,7 +51,7 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto mt-5 max-w-xl text-lg text-ink-soft">
-              Tap any game to play instantly. No downloads, no waiting â€” fund your wallet,
+              Tap any game to play instantly. No downloads, no waiting — fund your wallet,
               jump straight in, and cash out your winnings in minutes.
             </p>
 
@@ -93,7 +92,7 @@ export default function Home() {
               Hottest <span className="text-magenta">Games</span>
             </h2>
             <Link href="/games" className="font-display font-bold text-magenta hover:text-cyan">
-              See all â†’
+              See all →
             </Link>
           </div>
           {/* mobile: auto-scrolling rail */}
@@ -264,53 +263,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ WHEEL + PROMOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ TONIGHT'S DROPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="px-4 py-14">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+        <div className="mx-auto max-w-7xl">
           <Reveal>
-            <div className="candy-card rounded-[2rem] p-8">
-              <h2 className="text-center font-display text-3xl font-extrabold text-ink sm:text-4xl">
-                Spin the <span className="text-violet">Wheel of Wow</span>
-              </h2>
-              <p className="mx-auto mt-2 max-w-sm text-center text-ink-soft">
-                One free spin every day. Cash, spins, boosts and the odd jackpot. Give it a whirl.
-              </p>
-              <div className="mt-8">
-                <FortuneWheel />
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="space-y-4">
-            <Reveal>
+            <div className="mb-8 text-center">
               <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">
                 Tonight&apos;s <span className="text-gold">drops</span>
               </h2>
-            </Reveal>
+              <p className="mx-auto mt-2 max-w-xl text-ink-soft">
+                Fresh bonuses every day — claim a welcome match, spin the daily wheel, and stack
+                cashback every week.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PROMOS.slice(0, 3).map((p, i) => {
               const Icon = iconMap[p.icon];
               return (
                 <Reveal key={p.title} delay={i * 0.08}>
                   <Link
                     href="/promotions"
-                    className="candy-card flex items-center gap-4 rounded-2xl p-5 transition-transform hover:-translate-y-1"
+                    className="candy-card group flex h-full flex-col rounded-2xl p-6 transition-transform hover:-translate-y-1.5"
                   >
-                    <span
-                      className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-white"
-                      style={{ background: `linear-gradient(150deg, ${p.from}, ${p.to})`, boxShadow: `0 0 28px ${p.from}66` }}
-                    >
-                      <Icon className="h-8 w-8" />
-                    </span>
-                    <div>
+                    <div className="flex items-start justify-between">
                       <span
-                        className="rounded-full px-2 py-0.5 text-xs font-bold text-white"
+                        className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white transition-transform group-hover:scale-110"
+                        style={{ background: `linear-gradient(150deg, ${p.from}, ${p.to})`, boxShadow: `0 0 28px ${p.from}66` }}
+                      >
+                        <Icon className="h-7 w-7" />
+                      </span>
+                      <span
+                        className="rounded-full px-2.5 py-1 text-xs font-bold text-white"
                         style={{ background: p.from }}
                       >
                         {p.badge}
                       </span>
-                      <h3 className="mt-1 font-display text-xl font-bold text-ink">{p.title}</h3>
-                      <p className="text-sm text-ink-soft">{p.blurb}</p>
                     </div>
+                    <h3 className="mt-4 font-display text-xl font-bold text-ink">{p.title}</h3>
+                    <p className="mt-1 text-sm text-ink-soft">{p.blurb}</p>
+                    <span className="mt-4 font-display text-sm font-bold text-magenta transition-colors group-hover:text-cyan">
+                      {p.cta} →
+                    </span>
                   </Link>
                 </Reveal>
               );
@@ -338,7 +333,7 @@ export default function Home() {
               </h2>
               <p className="mx-auto mt-3 max-w-xl text-white/85">
                 Sign up tonight and your first deposit gets doubled. The lights are on,
-                the wheel is spinning â€” all that&apos;s missing is you.
+                the wheel is spinning — all that&apos;s missing is you.
               </p>
               <CandyLink href="/promotions" variant="gold" size="lg" className="mt-7">
                 <Ticket className="h-5 w-5" /> Get My 100% Bonus

@@ -70,7 +70,7 @@ export const PROMOS: Promo[] = [
   },
   {
     title: "Cashback Surge",
-    blurb: "Get up to 25% back every Monday â€” because every player deserves a comeback.",
+    blurb: "Get up to 25% back every Monday — because every player deserves a comeback.",
     badge: "WEEKLY",
     cta: "Opt In",
     from: "#aaff3c",
