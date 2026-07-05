@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 
 const PAYMENTS = [
   { name: "Cash App", image: "/payments/cash-app.png" },
@@ -10,29 +10,29 @@ const PAYMENTS = [
   { name: "Venmo", image: "/payments/venmo-word.png" },
   { name: "Revolut", image: "/payments/revolut.png" },
   { name: "Bitcoin", image: "/payments/bitcoin-logo.png" },
-  { name: "PayPal logo", image: "/payments/paypal-word.png" },
   { name: "Skrill", image: "/payments/skrill.png" },
   { name: "Debit card", image: "/payments/debit-card.png" },
 ];
 
+/** Compact marquee of payment logos in small glass chips. */
 export default function PaymentStrip() {
   const row = [...PAYMENTS, ...PAYMENTS, ...PAYMENTS];
 
   return (
-    <div className="relative mt-4 overflow-hidden py-1 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-      <div className="flex w-max animate-marquee items-center gap-5 [animation-direction:reverse] [animation-duration:18s] motion-reduce:animate-none">
+    <div className="relative mt-5 overflow-hidden py-1 [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">
+      <div className="flex w-max animate-marquee items-center gap-3 [animation-direction:reverse] [animation-duration:26s] motion-reduce:animate-none">
         {row.map((p, i) => (
           <div
             key={`${p.name}-${i}`}
-            className="relative flex h-32 w-64 shrink-0 items-center justify-center sm:h-40 sm:w-80"
+            className="flex h-12 w-32 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 backdrop-blur-sm sm:h-14 sm:w-36"
           >
             <Image
               src={p.image}
               alt={`${p.name} payments`}
               width={768}
               height={512}
-              className="relative h-full w-full object-contain drop-shadow-[0_14px_26px_rgba(0,0,0,0.5)]"
-              sizes="(max-width: 640px) 240px, 320px"
+              className="h-full max-h-8 w-auto max-w-full object-contain sm:max-h-9"
+              sizes="140px"
             />
           </div>
         ))}
@@ -40,6 +40,3 @@ export default function PaymentStrip() {
     </div>
   );
 }
-
-
-
