@@ -27,15 +27,7 @@ export default function ConfettiBackground({ count = 30 }: { count?: number }) {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      {/* slow aurora blobs */}
-      <div
-        className="absolute -left-1/4 top-0 h-[70vh] w-[70vh] rounded-full opacity-60 blur-3xl motion-reduce:animate-none animate-aurora"
-        style={{ background: "radial-gradient(circle, rgba(255,46,154,0.5), transparent 65%)" }}
-      />
-      <div
-        className="absolute -right-1/4 top-1/4 h-[70vh] w-[70vh] rounded-full opacity-50 blur-3xl motion-reduce:animate-none animate-aurora [animation-delay:-9s]"
-        style={{ background: "radial-gradient(circle, rgba(45,226,255,0.45), transparent 65%)" }}
-      />
+      {/* TEST: aurora blobs removed for clean-black look (restore two blur-3xl radial divs to revert) */}
 
       {/* rising neon sparks */}
       <div className="absolute inset-0 motion-reduce:hidden">

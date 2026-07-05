@@ -2,13 +2,14 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   X, Headphones, LogIn, UserPlus,
   Disc3, Gift, Rocket, Cherry, Zap, Dice5, Ticket, LayoutGrid, Hash,
   Fish, Crosshair, Sparkles, Gamepad2, Crown, Users, Heart,
 } from "lucide-react";
 
-/* Mirrors OrionStars' menu drawer, mapped to our routes. */
+/* Mirrors OrionStars' left sidebar menu, mapped to our routes. */
 const FEATURED = [
   { href: "/promotions", label: "Spin Wheel", icon: Disc3, color: "#ffc63d" },
   { href: "/promotions", label: "Promotion", icon: Gift, color: "#ff2e9a" },
@@ -34,6 +35,36 @@ const MORE = [
   { href: "/games", label: "Favorites", icon: Heart },
 ];
 
+function Row({
+  href, label, Icon, color, onClose,
+}: {
+  href: string;
+  label: string;
+  Icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  color?: string;
+  onClose: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClose}
+      className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/8 active:bg-white/10"
+    >
+      <span
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
+        style={
+          color
+            ? { background: `${color}26`, boxShadow: `0 0 14px ${color}33` }
+            : { background: "rgba(255,255,255,0.06)" }
+        }
+      >
+        <Icon className="h-4.5 w-4.5" style={color ? { color } : { color: "#b6a3d8" }} />
+      </span>
+      <span className="font-display text-sm font-bold text-ink">{label}</span>
+    </Link>
+  );
+}
+
 export default function MenuSheet({
   open,
   onClose,
@@ -52,128 +83,84 @@ export default function MenuSheet({
             onClick={onClose}
             className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm"
           />
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 32 }}
-            className="fixed inset-x-0 bottom-0 z-[61] flex max-h-[85vh] flex-col rounded-t-[2rem] border-t border-white/10 bg-[rgba(10,12,26,0.98)] shadow-[0_-20px_60px_-20px_rgba(176,86,255,0.5)]"
+          <motion.aside
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", stiffness: 340, damping: 34 }}
+            className="fixed bottom-0 left-0 top-0 z-[61] flex w-[300px] max-w-[84vw] flex-col border-r border-white/10 bg-[#080a16] shadow-[20px_0_60px_-20px_rgba(0,0,0,0.9)]"
           >
             {/* header */}
-            <div className="px-5 pt-4">
-              <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-white/15" />
-              <div className="flex items-center justify-between px-1">
-                <h2 className="font-display text-xl font-extrabold text-ink">Menu</h2>
-                <button
-                  onClick={onClose}
-                  aria-label="Close menu"
-                  className="grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-white/8 text-ink-soft transition-colors hover:bg-white/12 hover:text-ink"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+            <div className="flex items-center justify-between px-4 pb-2 pt-4">
+              <Image
+                src="/juwafire-logo.png"
+                alt="JuwaFire"
+                width={1024}
+                height={1024}
+                className="h-auto w-[86px] drop-shadow-[0_0_14px_rgba(255,46,154,0.3)]"
+              />
+              <button
+                onClick={onClose}
+                aria-label="Close menu"
+                className="grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-white/8 text-ink-soft transition-colors hover:bg-white/12 hover:text-ink"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
 
-            {/* scrollable body */}
-            <div className="no-scrollbar overflow-y-auto px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-              {/* featured */}
-              <div className="mt-3 grid grid-cols-2 gap-2.5">
-                {FEATURED.map((l) => {
-                  const Icon = l.icon;
-                  return (
-                    <Link
-                      key={l.label}
-                      href={l.href}
-                      onClick={onClose}
-                      className="candy-card flex items-center gap-3 rounded-2xl p-3.5 transition-transform active:scale-95"
-                    >
-                      <span
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-white"
-                        style={{ background: `${l.color}26`, boxShadow: `0 0 18px ${l.color}44` }}
-                      >
-                        <Icon className="h-5 w-5" style={{ color: l.color }} />
-                      </span>
-                      <span className="font-display text-sm font-bold text-ink">{l.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+            {/* scrollable vertical nav */}
+            <div className="no-scrollbar flex-1 overflow-y-auto px-3 pb-4">
+              {FEATURED.map((l) => (
+                <Row key={l.label} href={l.href} label={l.label} Icon={l.icon} color={l.color} onClose={onClose} />
+              ))}
 
-              {/* game categories */}
-              <p className="mt-5 px-1 font-display text-xs font-bold uppercase tracking-widest text-ink-soft">
+              <p className="mt-4 px-3 pb-1 font-display text-[11px] font-bold uppercase tracking-widest text-ink-soft">
                 Game Category
               </p>
-              <div className="mt-2 grid grid-cols-3 gap-2">
-                {CATEGORIES.map((l) => {
-                  const Icon = l.icon;
-                  return (
-                    <Link
-                      key={l.label}
-                      href={l.href}
-                      onClick={onClose}
-                      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/8 bg-white/4 p-3 text-center transition-colors active:scale-95 hover:bg-white/8"
-                    >
-                      <Icon className="h-5 w-5 text-ink-soft" />
-                      <span className="text-[11px] font-semibold leading-tight text-ink">
-                        {l.label}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
+              {CATEGORIES.map((l) => (
+                <Row key={l.label} href={l.href} label={l.label} Icon={l.icon} onClose={onClose} />
+              ))}
 
-              {/* more */}
-              <div className="mt-4 flex flex-col gap-1">
-                {MORE.map((l) => {
-                  const Icon = l.icon;
-                  return (
-                    <Link
-                      key={l.label}
-                      href={l.href}
-                      onClick={onClose}
-                      className="flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-colors hover:bg-white/8"
-                    >
-                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/6 text-ink-soft">
-                        <Icon className="h-4.5 w-4.5" />
-                      </span>
-                      <span className="font-display text-sm font-bold text-ink">{l.label}</span>
-                    </Link>
-                  );
-                })}
-                <a
-                  href="https://wa.me/10000000000"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-colors hover:bg-white/8"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/6 text-ink-soft">
-                    <Headphones className="h-4.5 w-4.5" />
-                  </span>
-                  <span className="font-display text-sm font-bold text-ink">24/7 Support</span>
-                </a>
-              </div>
+              <p className="mt-4 px-3 pb-1 font-display text-[11px] font-bold uppercase tracking-widest text-ink-soft">
+                More
+              </p>
+              {MORE.map((l) => (
+                <Row key={l.label} href={l.href} label={l.label} Icon={l.icon} onClose={onClose} />
+              ))}
 
-              {/* auth */}
-              <div className="mt-3 grid grid-cols-2 gap-2.5">
-                <Link
-                  href="/login"
-                  onClick={onClose}
-                  className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-3 font-display font-bold text-ink-soft transition-colors hover:bg-white/10 hover:text-ink"
-                >
-                  <LogIn className="h-4 w-4" />
-                  Log In
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={onClose}
-                  className="flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] py-3 font-display font-bold text-white shadow-[0_10px_30px_-8px_rgba(255,46,154,0.9)] transition-transform active:scale-95"
-                >
-                  <UserPlus className="h-4 w-4" />
-                  Join
-                </Link>
-              </div>
+              <a
+                href="https://wa.me/10000000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/8"
+              >
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/6">
+                  <Headphones className="h-4.5 w-4.5 text-ink-soft" />
+                </span>
+                <span className="font-display text-sm font-bold text-ink">24/7 Support</span>
+              </a>
             </div>
-          </motion.div>
+
+            {/* auth pinned at bottom */}
+            <div className="grid grid-cols-2 gap-2 border-t border-white/8 p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+              <Link
+                href="/login"
+                onClick={onClose}
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 font-display text-sm font-bold text-ink-soft transition-colors hover:bg-white/10 hover:text-ink"
+              >
+                <LogIn className="h-4 w-4" />
+                Log In
+              </Link>
+              <Link
+                href="/signup"
+                onClick={onClose}
+                className="flex items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] py-2.5 font-display text-sm font-bold text-white shadow-[0_10px_30px_-8px_rgba(255,46,154,0.9)] transition-transform active:scale-95"
+              >
+                <UserPlus className="h-4 w-4" />
+                Join
+              </Link>
+            </div>
+          </motion.aside>
         </>
       )}
     </AnimatePresence>

@@ -41,19 +41,11 @@ export default function Hero() {
       onMouseMove={reduce ? undefined : onMove}
       className="relative overflow-hidden px-4 pb-6 pt-6 sm:pt-10"
     >
-      {/* ── animated aurora backdrop ── */}
+      {/* TEST: hero aurora backdrop removed for clean-black look — subtle center glow only */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div
-          className="absolute left-1/2 top-[-6%] h-[520px] w-[820px] max-w-[95vw] -translate-x-1/2 rounded-full opacity-70 blur-3xl"
-          style={{ background: "radial-gradient(circle,rgba(255,46,154,0.5),transparent 62%)", animation: "var(--animate-aurora)" }}
-        />
-        <div
-          className="absolute -left-24 top-24 h-[380px] w-[380px] rounded-full opacity-55 blur-3xl"
-          style={{ background: "radial-gradient(circle,rgba(45,226,255,0.4),transparent 62%)", animation: "var(--animate-float)" }}
-        />
-        <div
-          className="absolute -right-20 top-8 h-[440px] w-[440px] rounded-full opacity-55 blur-3xl"
-          style={{ background: "radial-gradient(circle,rgba(176,86,255,0.45),transparent 62%)", animation: "var(--animate-float)", animationDelay: "1.5s" }}
+          className="absolute left-1/2 top-[-6%] h-[420px] w-[680px] max-w-[95vw] -translate-x-1/2 rounded-full opacity-30 blur-3xl"
+          style={{ background: "radial-gradient(circle,rgba(255,46,154,0.35),transparent 62%)" }}
         />
       </div>
 
