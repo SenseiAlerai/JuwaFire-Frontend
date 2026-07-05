@@ -88,6 +88,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <section className="px-4 py-14">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
+          {STATS.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.06}>
+              <div className="candy-card rounded-2xl px-4 py-6 text-center">
+                <p
+                  className="font-display text-3xl font-extrabold sm:text-4xl"
+                  style={{ color: s.color, textShadow: `0 0 24px ${s.color}66` }}
+                >
+                  {s.label === "Players Online" ? <LiveCount base={18402} /> : s.value}
+                </p>
+                <p className="mt-1 font-semibold text-ink-soft">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ WINNERS TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <section className="px-4 py-14">
+        <Reveal>
+          <WinnersTable />
+        </Reveal>
+      </section>
+
       {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ MEGA JACKPOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="px-4 py-12">
         <Reveal y={30}>
@@ -116,32 +142,6 @@ export default function Home() {
               </CandyLink>
             </div>
           </div>
-        </Reveal>
-      </section>
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="px-4 py-14">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.06}>
-              <div className="candy-card rounded-2xl px-4 py-6 text-center">
-                <p
-                  className="font-display text-3xl font-extrabold sm:text-4xl"
-                  style={{ color: s.color, textShadow: `0 0 24px ${s.color}66` }}
-                >
-                  {s.label === "Players Online" ? <LiveCount base={18402} /> : s.value}
-                </p>
-                <p className="mt-1 font-semibold text-ink-soft">{s.label}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ WINNERS TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="px-4 py-14">
-        <Reveal>
-          <WinnersTable />
         </Reveal>
       </section>
 
