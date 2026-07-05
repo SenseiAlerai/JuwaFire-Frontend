@@ -19,14 +19,14 @@ export default function PaymentStrip() {
         {row.map((p, i) => (
           <div
             key={`${p.name}-${i}`}
-            className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl border border-white/10 sm:h-[72px] sm:w-44"
+            className="relative h-16 w-40 shrink-0 sm:h-[72px] sm:w-44"
           >
             <Image
               src={p.image}
               alt={`${p.name} payments`}
               fill
               sizes="180px"
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         ))}
