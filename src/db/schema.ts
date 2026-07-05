@@ -136,3 +136,27 @@ export const cashoutRequests = pgTable("cashout_request", {
   status: reqStatusEnum("status").notNull().default("pending"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
+
+/* ────────────────────────────────────────────────────────────
+   Live support chat (user ↔ admin). One thread per user.
+   ──────────────────────────────────────────────────────────── */
+export const chatSenderEnum = pgEnum("chat_sender", ["user", "admin"]);
+
+export const chatMessages = pgTable(
+  "chat_message",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    sender: chatSenderEnum("sender").notNull(),
+    body: text("body"),
+    imageUrl: text("imageUrl"),
+    readByUser: timestamp("readByUser", { mode: "date" }),
+    readByAdmin: timestamp("readByAdmin", { mode: "date" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  },
+  (t) => [index("chat_user_idx").on(t.userId, t.createdAt)],
+);

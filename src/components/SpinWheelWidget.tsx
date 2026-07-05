@@ -427,7 +427,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
             role="button"
             tabIndex={0}
             onKeyDown={e => e.key === "Enter" && openModal()}
-            className="fixed right-0 z-40 cursor-pointer select-none bottom-[104px] md:bottom-auto md:top-[calc(50%_-_75px)]"
+            className="fixed right-0 z-40 cursor-pointer select-none bottom-[196px] md:bottom-auto md:top-[calc(50%_-_75px)]"
           >
             {/* outer glow halo — warm gold core + neon violet aura */}
             <div
