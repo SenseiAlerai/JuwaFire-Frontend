@@ -1,15 +1,15 @@
-import { CreditCard } from "lucide-react";
+import Image from "next/image";
 
-/* Brand-colored wordmarks — transparent, crisp on the dark strip. */
-const PAYMENTS: { name: string; color: string; card?: boolean }[] = [
-  { name: "Cash App", color: "#00D632" },
-  { name: "Zelle", color: "#a06bff" },
-  { name: "Apple Pay", color: "#f5f5f7" },
-  { name: "Google Pay", color: "#e8eaed" },
-  { name: "Chime", color: "#1EC677" },
-  { name: "Debit & Credit", color: "#dfe7ff", card: true },
+const PAYMENTS = [
+  { name: "Cash App", image: "/payments/pay-cashapp.png" },
+  { name: "Zelle", image: "/payments/pay-zelle.png" },
+  { name: "Apple Pay", image: "/payments/pay-applepay.png" },
+  { name: "Google Pay", image: "/payments/pay-gpay.png" },
+  { name: "Chime", image: "/payments/pay-chime.png" },
+  { name: "Debit & Credit", image: "/payments/pay-card.png" },
 ];
 
+/** Marquee of the saved payment logos as tiles. */
 export default function PaymentStrip() {
   const row = [...PAYMENTS, ...PAYMENTS, ...PAYMENTS];
 
@@ -19,22 +19,15 @@ export default function PaymentStrip() {
         {row.map((p, i) => (
           <div
             key={`${p.name}-${i}`}
-            className="flex h-12 shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 backdrop-blur-sm"
+            className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl border border-white/10 sm:h-[72px] sm:w-44"
           >
-            {p.card ? (
-              <CreditCard className="h-5 w-5" style={{ color: p.color }} />
-            ) : (
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{ background: p.color, boxShadow: `0 0 10px ${p.color}` }}
-              />
-            )}
-            <span
-              className="whitespace-nowrap font-display text-base font-extrabold tracking-tight"
-              style={{ color: p.color }}
-            >
-              {p.name}
-            </span>
+            <Image
+              src={p.image}
+              alt={`${p.name} payments`}
+              fill
+              sizes="180px"
+              className="object-cover"
+            />
           </div>
         ))}
       </div>
