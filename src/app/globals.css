@@ -5,9 +5,9 @@
    Dark stage, electric color, gold luxury. Energy you can feel.
    ============================================================ */
 @theme inline {
-  /* Stage */
-  --color-bg: #0a0613;
-  --color-bg-2: #160a2b;
+  /* Stage — TEST: OrionStars-style blue-black (#05060f). Revert: #0a0613 / #160a2b */
+  --color-bg: #05060f;
+  --color-bg-2: #0a0d1e;
 
   /* Electric brand palette */
   --color-magenta: #ff2e9a;   /* excitement / primary */
@@ -86,10 +86,12 @@
    ============================================================ */
 html { scroll-behavior: smooth; }
 body {
+  /* TEST: washes reduced to match OrionStars' flat dark look.
+     Revert opacities: 0.28 / 0.30 / 0.18 */
   background:
-    radial-gradient(900px 600px at 8% -5%, rgba(255, 46, 154, 0.28), transparent 60%),
-    radial-gradient(900px 700px at 100% 0%, rgba(176, 86, 255, 0.30), transparent 55%),
-    radial-gradient(800px 700px at 50% 115%, rgba(45, 226, 255, 0.18), transparent 55%),
+    radial-gradient(900px 600px at 8% -5%, rgba(255, 46, 154, 0.10), transparent 60%),
+    radial-gradient(900px 700px at 100% 0%, rgba(176, 86, 255, 0.11), transparent 55%),
+    radial-gradient(800px 700px at 50% 115%, rgba(45, 226, 255, 0.07), transparent 55%),
     linear-gradient(180deg, var(--color-bg-2) 0%, var(--color-bg) 45%);
   background-attachment: fixed;
   color: var(--color-foreground);
