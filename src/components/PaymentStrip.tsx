@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-const PAYMENTS = [
-  { name: "Cash App", image: "/payments/cash-app.png" },
+const PAYMENTS: { name: string; image: string; boost?: boolean }[] = [
+  { name: "Cash App", image: "/payments/cash-app.png", boost: true },
   { name: "Zelle", image: "/payments/zelle.png" },
   { name: "Apple Pay", image: "/payments/apple-pay.png" },
   { name: "Google Pay", image: "/payments/google-pay.png" },
@@ -31,7 +31,7 @@ export default function PaymentStrip() {
               alt={`${p.name} payments`}
               width={768}
               height={512}
-              className="h-full max-h-8 w-auto max-w-full object-contain sm:max-h-9"
+              className={`h-full w-auto max-w-full object-contain ${p.boost ? "max-h-11 sm:max-h-12" : "max-h-8 sm:max-h-9"}`}
               sizes="140px"
             />
           </div>
