@@ -8,17 +8,11 @@ import PaymentStrip from "@/components/PaymentStrip";
 import WinnerMarquee from "@/components/WinnerMarquee";
 import WinnersTable from "@/components/WinnersTable";
 import JackpotTicker from "@/components/JackpotTicker";
-import { GAMES, PROMOS } from "@/lib/data";
-import { iconMap } from "@/lib/iconMap";
-import { Ticket, Gift, Zap, ShieldCheck, Headphones, Clock, Crown } from "lucide-react";
+import { GAMES } from "@/lib/data";
+import { Ticket, Zap, ShieldCheck, Headphones, Clock, Crown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-const STEPS = [
-  { icon: Ticket, title: "Grab Your Pass", text: "Sign up in 30 seconds — no fuss, just the floor.", color: "#ff2e9a" },
-  { icon: Gift, title: "Claim 100% Bonus", text: "Your first deposit gets doubled. Walk in loaded.", color: "#b056ff" },
-  { icon: Zap, title: "Play & Cash Out", text: "Spin, deal, crash — payouts hit in 3 minutes flat.", color: "#aaff3c" },
-];
 
 const TRUST = [
   { icon: ShieldCheck, title: "Safe & Secure", text: "Protected payments you can trust.", color: "#2de2ff" },
@@ -85,25 +79,6 @@ export default function Home() {
               ),
             )}
           </div>
-        </div>
-      </section>
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="px-4 py-14">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.06}>
-              <div className="candy-card rounded-2xl px-4 py-6 text-center">
-                <p
-                  className="font-display text-3xl font-extrabold sm:text-4xl"
-                  style={{ color: s.color, textShadow: `0 0 24px ${s.color}66` }}
-                >
-                  {s.label === "Players Online" ? <LiveCount base={18402} /> : s.value}
-                </p>
-                <p className="mt-1 font-semibold text-ink-soft">{s.label}</p>
-              </div>
-            </Reveal>
-          ))}
         </div>
       </section>
 
@@ -182,91 +157,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="px-4 py-10">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">
-              Three steps to the <span className="text-magenta">rush</span>
-            </h2>
-          </Reveal>
-          <div className="mt-6 grid grid-cols-3 gap-3 sm:gap-5 md:gap-8">
-            {STEPS.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.1}>
-                <div className="relative min-w-0 text-center md:flex md:items-start md:gap-3 md:text-left">
-                  <span
-                    className="mx-auto grid h-10 w-10 place-items-center rounded-xl text-white shadow-[0_0_22px_rgba(255,46,154,0.35)] md:mx-0 md:h-12 md:w-12 md:shrink-0 md:rounded-2xl"
-                    style={{ background: s.color, boxShadow: `0 0 22px ${s.color}77` }}
-                  >
-                    <s.icon className="h-5 w-5 md:h-6 md:w-6" />
-                  </span>
-                  <span className="mt-2 block min-w-0 md:mt-0">
-                    <p className="font-display text-[10px] font-bold uppercase tracking-wide text-ink-soft sm:text-xs">
-                      Step {i + 1}
-                    </p>
-                    <h3 className="mt-0.5 text-balance font-display text-sm font-bold leading-tight text-ink sm:text-base md:text-lg">
-                      {s.title}
-                    </h3>
-                    <p className="mt-1 hidden text-sm leading-5 text-ink-soft sm:block">{s.text}</p>
-                  </span>
-                  {i < STEPS.length - 1 ? (
-                    <span className="pointer-events-none absolute left-[calc(100%+0.25rem)] top-5 hidden h-px w-6 bg-gradient-to-r from-white/30 to-transparent md:block" />
-                  ) : null}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ TONIGHT'S DROPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="px-4 py-14">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-8 text-center">
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">
-                Tonight&apos;s <span className="text-gold">drops</span>
-              </h2>
-              <p className="mx-auto mt-2 max-w-xl text-ink-soft">
-                Fresh bonuses every day — claim a welcome match, spin the daily wheel, and stack
-                cashback every week.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {PROMOS.slice(0, 3).map((p, i) => {
-              const Icon = iconMap[p.icon];
-              return (
-                <Reveal key={p.title} delay={i * 0.08}>
-                  <Link
-                    href="/promotions"
-                    className="candy-card group flex h-full flex-col rounded-2xl p-6 transition-transform hover:-translate-y-1.5"
-                  >
-                    <div className="flex items-start justify-between">
-                      <span
-                        className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white transition-transform group-hover:scale-110"
-                        style={{ background: `linear-gradient(150deg, ${p.from}, ${p.to})`, boxShadow: `0 0 28px ${p.from}66` }}
-                      >
-                        <Icon className="h-7 w-7" />
-                      </span>
-                      <span
-                        className="rounded-full px-2.5 py-1 text-xs font-bold text-white"
-                        style={{ background: p.from }}
-                      >
-                        {p.badge}
-                      </span>
-                    </div>
-                    <h3 className="mt-4 font-display text-xl font-bold text-ink">{p.title}</h3>
-                    <p className="mt-1 text-sm text-ink-soft">{p.blurb}</p>
-                    <span className="mt-4 font-display text-sm font-bold text-magenta transition-colors group-hover:text-cyan">
-                      {p.cta} →
-                    </span>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </div>
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
+          {STATS.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.06}>
+              <div className="candy-card rounded-2xl px-4 py-6 text-center">
+                <p
+                  className="font-display text-3xl font-extrabold sm:text-4xl"
+                  style={{ color: s.color, textShadow: `0 0 24px ${s.color}66` }}
+                >
+                  {s.label === "Players Online" ? <LiveCount base={18402} /> : s.value}
+                </p>
+                <p className="mt-1 font-semibold text-ink-soft">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
