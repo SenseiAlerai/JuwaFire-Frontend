@@ -21,7 +21,7 @@ const FLOATERS = [
   { src: GAMES[6].image, cls: "right-[7%] bottom-[4%] h-24 w-24 xl:h-32 xl:w-32", rot: "-6deg", d: "0.3s", depth: 1.2 },
 ];
 
-const AVATARS = ["#ff2e9a", "#b056ff", "#aaff3c", "#2de2ff"];
+const AVATARS = ["/avatars/av1.png", "/avatars/av2.png", "/avatars/av3.png", "/avatars/av4.png"];
 
 export default function Hero() {
   const reduce = useReducedMotion();
@@ -128,8 +128,15 @@ export default function Hero() {
           className="mt-6 flex items-center justify-center gap-2 text-ink-soft"
         >
           <div className="flex -space-x-2">
-            {AVATARS.map((c) => (
-              <span key={c} className="h-7 w-7 rounded-full border-2 border-bg" style={{ background: c }} />
+            {AVATARS.map((src) => (
+              <Image
+                key={src}
+                src={src}
+                alt=""
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-full border-2 border-bg object-cover"
+              />
             ))}
           </div>
           <span className="flex items-center gap-1 text-sm">
