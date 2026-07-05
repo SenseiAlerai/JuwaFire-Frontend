@@ -1,20 +1,15 @@
-import Image from "next/image";
+import { CreditCard } from "lucide-react";
 
-const PAYMENTS: { name: string; image: string; boost?: boolean }[] = [
-  { name: "Cash App", image: "/payments/cash-app.png", boost: true },
-  { name: "Zelle", image: "/payments/zelle.png" },
-  { name: "Apple Pay", image: "/payments/apple-pay.png" },
-  { name: "Google Pay", image: "/payments/google-pay.png" },
-  { name: "PayPal", image: "/payments/paypal.png" },
-  { name: "Chime", image: "/payments/chime-word.png" },
-  { name: "Venmo", image: "/payments/venmo-word.png" },
-  { name: "Revolut", image: "/payments/revolut.png" },
-  { name: "Bitcoin", image: "/payments/bitcoin-logo.png" },
-  { name: "Skrill", image: "/payments/skrill.png" },
-  { name: "Debit card", image: "/payments/debit-card.png" },
+/* Brand-colored wordmarks — transparent, crisp on the dark strip. */
+const PAYMENTS: { name: string; color: string; card?: boolean }[] = [
+  { name: "Cash App", color: "#00D632" },
+  { name: "Zelle", color: "#a06bff" },
+  { name: "Apple Pay", color: "#f5f5f7" },
+  { name: "Google Pay", color: "#e8eaed" },
+  { name: "Chime", color: "#1EC677" },
+  { name: "Debit & Credit", color: "#dfe7ff", card: true },
 ];
 
-/** Compact marquee of payment logos in small glass chips. */
 export default function PaymentStrip() {
   const row = [...PAYMENTS, ...PAYMENTS, ...PAYMENTS];
 
@@ -24,16 +19,22 @@ export default function PaymentStrip() {
         {row.map((p, i) => (
           <div
             key={`${p.name}-${i}`}
-            className="flex h-12 w-32 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 backdrop-blur-sm sm:h-14 sm:w-36"
+            className="flex h-12 shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 backdrop-blur-sm"
           >
-            <Image
-              src={p.image}
-              alt={`${p.name} payments`}
-              width={768}
-              height={512}
-              className={`h-full w-auto max-w-full object-contain ${p.boost ? "max-h-11 sm:max-h-12" : "max-h-8 sm:max-h-9"}`}
-              sizes="140px"
-            />
+            {p.card ? (
+              <CreditCard className="h-5 w-5" style={{ color: p.color }} />
+            ) : (
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{ background: p.color, boxShadow: `0 0 10px ${p.color}` }}
+              />
+            )}
+            <span
+              className="whitespace-nowrap font-display text-base font-extrabold tracking-tight"
+              style={{ color: p.color }}
+            >
+              {p.name}
+            </span>
           </div>
         ))}
       </div>
