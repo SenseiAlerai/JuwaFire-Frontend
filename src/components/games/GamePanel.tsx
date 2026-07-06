@@ -5,7 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Play, ArrowUpCircle, ArrowDownCircle, Copy, Check, Eye, EyeOff, Loader2, Sparkles } from "lucide-react";
 import type { Game } from "@/lib/data";
-import { formatUSD } from "@/lib/wallet";
+import { formatUSD } from "@/lib/format";
 import { toast } from "@/lib/toast";
 import { sfxCoin, sfxError } from "@/lib/sound";
 import { useGameAccounts } from "./GameAccountsProvider";
