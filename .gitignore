@@ -13,6 +13,11 @@
 # testing
 /coverage
 
+# monorepo apps + packages
+**/node_modules/
+**/.next/
+**/out/
+
 # next.js
 /.next/
 /out/
