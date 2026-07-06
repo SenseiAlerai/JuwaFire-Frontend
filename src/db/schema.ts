@@ -30,6 +30,8 @@ export const users = pgTable("user", {
   balanceCents: integer("balanceCents").notNull().default(0),
   // lifetime total deposited in CENTS — drives VIP tier (only ever increases)
   lifetimeDepositCents: integer("lifetimeDepositCents").notNull().default(0),
+  // referral: the user id (or code) that referred this account
+  referredBy: text("referredBy"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
 
@@ -139,6 +141,25 @@ export const cashoutRequests = pgTable("cashout_request", {
   status: reqStatusEnum("status").notNull().default("pending"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
+
+/* ────────────────────────────────────────────────────────────
+   Admin audit log — every staff/admin action is recorded here.
+   ──────────────────────────────────────────────────────────── */
+export const auditLog = pgTable(
+  "audit_log",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    actorId: text("actorId").references(() => users.id, { onDelete: "set null" }),
+    action: text("action").notNull(), // e.g. "redeem.approve", "balance.adjust", "staff.create"
+    targetType: text("targetType"), // "user" | "cashout_request" | ...
+    targetId: text("targetId"),
+    details: text("details"), // JSON / free text
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  },
+  (t) => [index("audit_actor_idx").on(t.actorId, t.createdAt)],
+);
 
 /* ────────────────────────────────────────────────────────────
    Per-platform game accounts (one per user per game).
