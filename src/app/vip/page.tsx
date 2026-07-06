@@ -90,6 +90,11 @@ export default function VipPage() {
                     </p>
                     <p className="text-xs font-semibold uppercase text-ink-soft">cashback</p>
                     <p className="mt-3 text-sm text-ink-soft">{t.perk}</p>
+                    <p className="mt-3 border-t border-white/10 pt-3 text-xs font-semibold text-ink-soft">
+                      {t.minDepositCents === 0
+                        ? "Starting tier"
+                        : `$${(t.minDepositCents / 100).toLocaleString("en-US")}+ deposited`}
+                    </p>
                   </div>
                 </Reveal>
               );

@@ -96,14 +96,15 @@ export type VipTier = {
   cashback: string;
   color: string;
   icon: IconName;
+  minDepositCents: number; // lifetime deposits needed to reach this tier
 };
 
 export const VIP_TIERS: VipTier[] = [
-  { name: "Spark", perk: "Daily free spins", cashback: "5%", color: "#2de2ff", icon: "sparkles" },
-  { name: "Voltage", perk: "Weekly bonus box", cashback: "8%", color: "#aaff3c", icon: "circle" },
-  { name: "Neon", perk: "Personal host", cashback: "12%", color: "#b056ff", icon: "gem" },
-  { name: "Electric", perk: "Faster payouts", cashback: "15%", color: "#ff2e9a", icon: "wheel" },
-  { name: "Ringmaster", perk: "Cashback, no limits", cashback: "20%", color: "#ffc63d", icon: "crown" },
+  { name: "Spark", perk: "Daily free spins", cashback: "5%", color: "#2de2ff", icon: "sparkles", minDepositCents: 0 },
+  { name: "Voltage", perk: "Weekly bonus box", cashback: "8%", color: "#aaff3c", icon: "circle", minDepositCents: 10000 },
+  { name: "Neon", perk: "Personal host", cashback: "12%", color: "#b056ff", icon: "gem", minDepositCents: 50000 },
+  { name: "Electric", perk: "Faster payouts", cashback: "15%", color: "#ff2e9a", icon: "wheel", minDepositCents: 150000 },
+  { name: "Ringmaster", perk: "Cashback, no limits", cashback: "20%", color: "#ffc63d", icon: "crown", minDepositCents: 500000 },
 ];
 
 export const WINNERS = [

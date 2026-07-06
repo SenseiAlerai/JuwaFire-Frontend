@@ -27,6 +27,8 @@ export const users = pgTable("user", {
   role: text("role").notNull().default("player"), // player | staff | admin
   // wallet balance in CENTS (integer = no float rounding bugs)
   balanceCents: integer("balanceCents").notNull().default(0),
+  // lifetime total deposited in CENTS — drives VIP tier (only ever increases)
+  lifetimeDepositCents: integer("lifetimeDepositCents").notNull().default(0),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
 

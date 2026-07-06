@@ -5,13 +5,11 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { users, transactions } from "@/db/schema";
 import { formatUSD } from "@/lib/wallet";
+import { computeVip } from "@/lib/vip";
 import WalletActions from "@/components/dashboard/WalletActions";
-import { GAMES, VIP_TIERS } from "@/lib/data";
+import { GAMES } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
-import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles, Zap } from "lucide-react";
-
-/* voltage thresholds to reach each VIP tier (index-aligned with VIP_TIERS) */
-const TIER_VOLTAGE = [0, 300, 900, 2200, 5000];
+import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -38,18 +36,9 @@ export default async function DashboardPage() {
 
   const greeting = me.username || me.name || "player";
 
-  // Gamified VIP "voltage" — derived from wallet activity, stable per render.
-  const voltage = Math.floor(me.balanceCents / 100) * 3 + 120;
-  let tierIdx = 0;
-  for (let i = 0; i < TIER_VOLTAGE.length; i++) if (voltage >= TIER_VOLTAGE[i]) tierIdx = i;
-  const tier = VIP_TIERS[tierIdx];
+  // VIP tier from lifetime deposits (only ever climbs).
+  const { index: tierIdx, tier, nextTier, isMax, pct, toGoCents } = computeVip(me.lifetimeDepositCents);
   const TierIcon = iconMap[tier.icon];
-  const isMax = tierIdx >= VIP_TIERS.length - 1;
-  const nextTier = isMax ? null : VIP_TIERS[tierIdx + 1];
-  const floor = TIER_VOLTAGE[tierIdx];
-  const ceil = isMax ? voltage : TIER_VOLTAGE[tierIdx + 1];
-  const pct = isMax ? 100 : Math.min(100, Math.round(((voltage - floor) / (ceil - floor)) * 100));
-  const toGo = isMax ? 0 : ceil - voltage;
 
   return (
     <div className="px-4 pt-10">
@@ -103,8 +92,7 @@ export default async function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 font-display font-bold text-gold">
-              <Zap className="h-4 w-4" />
-              {voltage.toLocaleString("en-US")} voltage
+              {formatUSD(me.lifetimeDepositCents)} deposited
             </div>
           </div>
 
@@ -129,9 +117,8 @@ export default async function DashboardPage() {
                 <>You&apos;ve reached the top — <span className="font-bold text-gold">{tier.name}</span> perks unlocked.</>
               ) : (
                 <>
-                  <span className="font-bold text-ink">{toGo.toLocaleString("en-US")} voltage</span> to{" "}
-                  <span className="font-bold" style={{ color: nextTier!.color }}>{nextTier!.name}</span>{" "}
-                  — keep playing to climb.
+                  Deposit <span className="font-bold text-ink">{formatUSD(toGoCents)}</span> more to reach{" "}
+                  <span className="font-bold" style={{ color: nextTier!.color }}>{nextTier!.name}</span>.
                 </>
               )}
             </p>

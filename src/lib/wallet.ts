@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { users, transactions } from "@/db/schema";
 
@@ -33,7 +33,12 @@ export async function applyTransaction(
     const next = row.balance + amountCents;
     if (next < 0) throw new WalletError("Insufficient balance");
 
-    await tx.update(users).set({ balanceCents: next }).where(eq(users.id, userId));
+    // Deposits also accrue lifetime deposits (drives VIP tier — never decreases).
+    const patch =
+      type === "deposit" && amountCents > 0
+        ? { balanceCents: next, lifetimeDepositCents: sql`${users.lifetimeDepositCents} + ${amountCents}` }
+        : { balanceCents: next };
+    await tx.update(users).set(patch).where(eq(users.id, userId));
     await tx.insert(transactions).values({
       userId,
       type,
