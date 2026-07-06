@@ -89,6 +89,9 @@ export default async function DashboardPage() {
                 <h3 className="font-display text-xl font-extrabold" style={{ color: tier.color }}>
                   {tier.name}
                 </h3>
+                <p className="text-xs font-semibold text-ink-soft">
+                  {tier.cashback} weekly net-loss cashback
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 font-display font-bold text-gold">

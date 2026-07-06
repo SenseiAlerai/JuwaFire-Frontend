@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Do bonuses have wagering requirements?",
-    a: "Yes — a friendly 20x on bonus funds, one of the lowest on the strip. Full terms on each offer.",
+    a: "Yes — a simple 3x playthrough on your deposit + bonus before you cash out. One of the lowest on the strip.",
   },
 ];
 
@@ -57,6 +57,7 @@ export default function PromotionsPage() {
                   Plus 200 free spins on Sugar Smash. Double your first deposit and walk
                   straight into the rush.
                 </p>
+                <p className="mt-2 text-xs text-white/60">3× wagering on deposit + bonus.</p>
               </div>
               <CandyLink href="/games" variant="gold" size="lg">
                 Claim Now
