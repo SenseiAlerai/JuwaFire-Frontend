@@ -6,6 +6,7 @@ import {
   primaryKey,
   pgEnum,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -138,6 +139,33 @@ export const cashoutRequests = pgTable("cashout_request", {
   status: reqStatusEnum("status").notNull().default("pending"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
+
+/* ────────────────────────────────────────────────────────────
+   Per-platform game accounts (one per user per game).
+   ──────────────────────────────────────────────────────────── */
+export const gameAccountStatusEnum = pgEnum("game_account_status", [
+  "pending",
+  "active",
+  "suspended",
+]);
+
+export const gameAccounts = pgTable(
+  "game_account",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    gameKey: text("gameKey").notNull(), // game name, e.g. "Juwa"
+    gameUsername: text("gameUsername").notNull(),
+    gamePassword: text("gamePassword"),
+    status: gameAccountStatusEnum("status").notNull().default("active"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("game_account_user_game_idx").on(t.userId, t.gameKey)],
+);
 
 /* ────────────────────────────────────────────────────────────
    Live support chat (user ↔ admin). One thread per user.

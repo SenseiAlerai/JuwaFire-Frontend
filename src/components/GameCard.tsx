@@ -9,8 +9,9 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
-import { UserPlus, LogIn } from "lucide-react";
+import { Play, Sparkles, LogIn } from "lucide-react";
 import type { Game } from "@/lib/data";
+import { useGameAccounts } from "./games/GameAccountsProvider";
 
 export default function GameCard({
   game,
@@ -23,6 +24,8 @@ export default function GameCard({
 }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+  const { loggedIn, accounts, openGame } = useGameAccounts();
+  const account = accounts[game.name];
 
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -40,20 +43,31 @@ export default function GameCard({
     my.set(0.5);
   }
 
+  // CTA state
+  const cta = !loggedIn
+    ? { label: "Log in to play", Icon: LogIn, cls: "border border-white/25 bg-white/10 text-white" }
+    : account
+      ? { label: "Play", Icon: Play, cls: "bg-[linear-gradient(135deg,#aaff3c,#2de2ff)] text-[#0a1402]" }
+      : { label: "Set Up", Icon: Sparkles, cls: "bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] text-white" };
+
   return (
     <motion.div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
+      onClick={() => openGame(game)}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openGame(game)}
+      role="button"
+      tabIndex={0}
+      aria-label={`${game.name} — ${cta.label}`}
       initial={noReveal ? false : { opacity: 0, y: 24 }}
       whileInView={noReveal ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45, delay: (index % 6) * 0.05, ease: [0.34, 1.56, 0.64, 1] }}
       whileHover={reduce ? undefined : { y: -6, scale: 1.02 }}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className="group relative block aspect-[3/4] w-full rounded-2xl [transform-style:preserve-3d]"
+      className="group relative block aspect-[3/4] w-full cursor-pointer rounded-2xl [transform-style:preserve-3d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
     >
-      {/* accent glow that blooms on hover */}
       <span
         className="pointer-events-none absolute -inset-1 rounded-3xl opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-70"
         style={{ background: game.accent }}
@@ -67,9 +81,7 @@ export default function GameCard({
           sizes="(max-width:640px) 45vw, (max-width:1024px) 30vw, 180px"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {/* readability gradient */}
         <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/25" />
-        {/* sheen sweep */}
         <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,0.22)_50%,transparent_65%)] bg-[length:200%_100%] [background-position:200%_0] transition-[background-position] duration-700 group-hover:[background-position:-200%_0]" />
 
         {/* badges */}
@@ -81,13 +93,15 @@ export default function GameCard({
             {game.badge.label}
           </span>
         )}
-        <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-black/35 px-2.5 py-1 text-[11px] font-semibold text-white/90 ring-1 ring-white/10 backdrop-blur-sm">
-          {game.category}
-        </span>
+        {loggedIn && account && (
+          <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-lime/20 px-2.5 py-1 text-[11px] font-bold text-lime ring-1 ring-lime/30 backdrop-blur-sm">
+            Active
+          </span>
+        )}
 
-        {/* title block */}
+        {/* title */}
         <span
-          className="absolute inset-x-0 bottom-0 p-3.5 transition-transform duration-300 md:group-hover:-translate-y-14"
+          className="absolute inset-x-0 bottom-0 p-3.5 transition-transform duration-300 md:group-hover:-translate-y-12"
           style={{ transform: "translateZ(18px)" }}
         >
           <span className="block font-display text-base font-bold leading-tight text-white drop-shadow sm:text-lg">
@@ -102,31 +116,13 @@ export default function GameCard({
           </span>
         </span>
 
-        {/* dual CTA — always visible on mobile, hover/focus reveal on desktop */}
+        {/* CTA — always visible on mobile, hover/focus reveal on desktop */}
         <span
-          className="absolute inset-x-2.5 bottom-2.5 z-10 grid grid-cols-2 gap-1.5 transition-all duration-300 md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100"
+          className={`absolute inset-x-2.5 bottom-2.5 z-10 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[12px] font-bold transition-all duration-300 md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100 ${cta.cls}`}
           style={{ transform: "translateZ(24px)" }}
         >
-          <a
-            href={game.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Sign up free on ${game.name}`}
-            className="flex items-center justify-center gap-1 rounded-xl bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] py-2 text-[11px] font-bold text-white shadow-[0_6px_18px_-6px_rgba(255,46,154,0.9)] transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
-          >
-            <UserPlus className="h-3.5 w-3.5" />
-            Sign Up
-          </a>
-          <a
-            href={game.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Existing user login on ${game.name}`}
-            className="flex items-center justify-center gap-1 rounded-xl border border-white/25 bg-white/10 py-2 text-[11px] font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
-          >
-            <LogIn className="h-3.5 w-3.5" />
-            Log In
-          </a>
+          <cta.Icon className="h-3.5 w-3.5" />
+          {cta.label}
         </span>
       </span>
     </motion.div>

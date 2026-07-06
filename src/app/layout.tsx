@@ -10,6 +10,7 @@ import SoundToggle from "@/components/SoundToggle";
 import LiveActivity from "@/components/LiveActivity";
 import SpinWheelWidget from "@/components/SpinWheelWidget";
 import ChatWidget from "@/components/ChatWidget";
+import GameAccountsProvider from "@/components/games/GameAccountsProvider";
 import { auth } from "@/auth";
 
 const sora = Sora({
@@ -46,7 +47,9 @@ export default async function RootLayout({
       <body className="flex min-h-screen flex-col antialiased">
         <ConfettiBackground />
         <Navbar user={session?.user ?? null} />
-        <main className="flex-1">{children}</main>
+        <GameAccountsProvider loggedIn={!!session?.user}>
+          <main className="flex-1">{children}</main>
+        </GameAccountsProvider>
         <Footer />
         <BottomNav />
         <Toaster />
