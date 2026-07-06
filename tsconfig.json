@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@juwafire/db": ["./packages/db/src/index.ts"],
+      "@juwafire/db/*": ["./packages/db/src/*.ts"]
     }
   },
   "include": [

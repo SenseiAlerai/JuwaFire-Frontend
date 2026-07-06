@@ -2,6 +2,10 @@
   "name": "jolly-casino",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "admin"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,6 +17,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@juwafire/db": "*",
     "@auth/drizzle-adapter": "^1.11.2",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",

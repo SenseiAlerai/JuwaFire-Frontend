@@ -1,0 +1,19 @@
+{
+  "name": "@juwafire/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./client": "./src/client.ts",
+    "./wallet": "./src/wallet.ts",
+    "./format": "./src/format.ts",
+    "./gameAccount": "./src/gameAccount.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "*",
+    "pg": "*",
+    "zod": "*"
+  }
+}
