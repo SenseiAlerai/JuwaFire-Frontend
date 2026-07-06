@@ -25,7 +25,7 @@ const COLS = [
     title: "Help",
     links: [
       { label: "Support", href: "/profile" },
-      { label: "Payments", href: "/promotions" },
+      { label: "Cashout Rules", href: "/cashout" },
       { label: "Responsible Play", href: "/promotions" },
       { label: "Sign Up", href: "/signup" },
     ],

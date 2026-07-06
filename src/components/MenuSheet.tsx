@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   X, Headphones, LogIn, UserPlus,
   Disc3, Gift, Rocket, Cherry, Zap, Dice5, Ticket, LayoutGrid, Hash,
-  Fish, Crosshair, Sparkles, Gamepad2, Crown, Users, Heart,
+  Fish, Crosshair, Sparkles, Gamepad2, Crown, Users, Heart, ScrollText,
 } from "lucide-react";
 
 /* Mirrors OrionStars' left sidebar menu, mapped to our routes. */
@@ -32,6 +32,7 @@ const MORE = [
   { href: "/games", label: "Platforms", icon: Gamepad2 },
   { href: "/vip", label: "VIP Rewards", icon: Crown },
   { href: "/refer", label: "Refer & Earn", icon: Users },
+  { href: "/cashout", label: "Cashout Rules", icon: ScrollText },
   { href: "/games", label: "Favorites", icon: Heart },
 ];
 

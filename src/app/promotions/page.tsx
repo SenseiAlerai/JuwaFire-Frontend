@@ -19,8 +19,8 @@ const FAQ = [
     a: "Every player gets one free daily spin. VIP members from Neon tier up unlock bonus spins.",
   },
   {
-    q: "Do bonuses have wagering requirements?",
-    a: "Yes — a simple 3x playthrough on your deposit + bonus before you cash out. One of the lowest on the strip.",
+    q: "How do cashouts work?",
+    a: "No confusing wagering math — we use simple minimum and maximum cashout limits based on your deposit. Check the Cashout Rules page for the full breakdown.",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function PromotionsPage() {
                   Plus 200 free spins on Sugar Smash. Double your first deposit and walk
                   straight into the rush.
                 </p>
-                <p className="mt-2 text-xs text-white/60">3× wagering on deposit + bonus.</p>
+                <p className="mt-2 text-xs text-white/60">Min &amp; max cashout limits apply — see Cashout Rules.</p>
               </div>
               <CandyLink href="/games" variant="gold" size="lg">
                 Claim Now
