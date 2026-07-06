@@ -3,11 +3,10 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db, users } from "@juwafire/db";
+import { authConfig } from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
-  trustHost: true,
+  ...authConfig,
   providers: [
     Credentials({
       credentials: { username: {}, password: {} },
@@ -33,24 +32,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        const u = user as { id?: string; role?: string; username?: string | null };
-        token.id = u.id;
-        token.role = u.role ?? "staff";
-        token.username = u.username ?? null;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        const s = session.user as { id?: string; role?: string; username?: string | null };
-        s.id = token.id as string;
-        s.role = token.role as string;
-        s.username = (token.username as string | null) ?? null;
-      }
-      return session;
-    },
-  },
 });
