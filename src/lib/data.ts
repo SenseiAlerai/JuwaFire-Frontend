@@ -47,6 +47,7 @@ export type Promo = {
   from: string;
   to: string;
   icon: IconName;
+  href?: string;
 };
 
 export const PROMOS: Promo[] = [
@@ -79,12 +80,13 @@ export const PROMOS: Promo[] = [
   },
   {
     title: "Refer & Earn",
-    blurb: "Bring a friend and you both pocket a $25 bonus once they play. Everybody wins.",
+    blurb: "Bring a friend and you both pocket a $10 bonus once they play. Everybody wins.",
     badge: "FRIENDS",
     cta: "Get Link",
     from: "#ff3b5c",
     to: "#ffc63d",
     icon: "sparkles",
+    href: "/refer",
   },
 ];
 

@@ -31,7 +31,7 @@ const MORE = [
   { href: "/games", label: "Sweepstake Games", icon: Sparkles },
   { href: "/games", label: "Platforms", icon: Gamepad2 },
   { href: "/vip", label: "VIP Rewards", icon: Crown },
-  { href: "/promotions", label: "Refer & Earn", icon: Users },
+  { href: "/refer", label: "Refer & Earn", icon: Users },
   { href: "/games", label: "Favorites", icon: Heart },
 ];
 

@@ -18,7 +18,7 @@ const COLS = [
       { label: "Promotions", href: "/promotions" },
       { label: "VIP Club", href: "/vip" },
       { label: "Daily Wheel", href: "/promotions" },
-      { label: "Refer a Friend", href: "/promotions" },
+      { label: "Refer a Friend", href: "/refer" },
     ],
   },
   {

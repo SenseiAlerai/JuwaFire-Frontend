@@ -88,7 +88,7 @@ export default function PromotionsPage() {
                   </div>
                   <h3 className="mt-4 font-display text-2xl font-bold text-ink">{p.title}</h3>
                   <p className="mt-2 text-ink-soft">{p.blurb}</p>
-                  <CandyLink href="/games" variant="ghost" size="sm" className="mt-5">
+                  <CandyLink href={p.href ?? "/games"} variant="ghost" size="sm" className="mt-5">
                     {p.cta}
                   </CandyLink>
                 </div>
