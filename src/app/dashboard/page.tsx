@@ -9,7 +9,8 @@ import { computeVip } from "@/lib/vip";
 import WalletActions from "@/components/dashboard/WalletActions";
 import { GAMES } from "@/lib/data";
 import { iconMap } from "@/lib/iconMap";
-import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles, ScrollText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +70,15 @@ export default async function DashboardPage() {
           </div>
 
           {/* Actions */}
-          <WalletActions balanceCents={me.balanceCents} games={GAMES.map((g) => g.name)} />
+          <div>
+            <WalletActions balanceCents={me.balanceCents} games={GAMES.map((g) => g.name)} />
+            <Link
+              href="/cashout"
+              className="mt-3 flex items-center justify-center gap-1.5 text-sm font-semibold text-magenta transition-colors hover:text-cyan"
+            >
+              <ScrollText className="h-4 w-4" /> View cashout limits &amp; rules
+            </Link>
+          </div>
         </div>
 
         {/* VIP progress */}
