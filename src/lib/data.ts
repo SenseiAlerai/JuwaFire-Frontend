@@ -23,18 +23,20 @@ const NEW: GameBadge = { label: "New", color: "#aaff3c" };
 
 export const GAMES: Game[] = [
   { name: "Juwa", subtitle: "Dragon Fortune", category: "Slots", badge: POPULAR, image: "/games/game-juwa.png", url: "http://dl.juwa777.com/", accent: "#ff2e9a" },
-  { name: "Fire Kirin", subtitle: "Blazing Tables", category: "Fish", badge: HOT, image: "/games/game-firekirin.png", url: "https://firekirin.com/", accent: "#ff3b5c" },
-  { name: "Orion Stars", subtitle: "Cosmic Spins", category: "Slots", badge: TRENDING, image: "/games/game-orionstars.png", url: "http://www.orionstarsonline.com/", accent: "#2de2ff" },
-  { name: "Game Vault", subtitle: "Golden Rewards", category: "Slots", badge: NEW, image: "/games/game-gamevault.png", url: "https://download.gamevault999.com/", accent: "#ffc63d" },
+  { name: "Golden Dragon", subtitle: "Blazing Riches", category: "Fish", badge: HOT, image: "/games/game-goldendragon.jpg", url: "https://playgd.mobi/", accent: "#ffc63d" },
+  { name: "Fire Kirin", subtitle: "Blazing Tables", category: "Fish", badge: HOT, image: "/games/game-firekirin.jpg", url: "https://firekirin.com/", accent: "#ff3b5c" },
+  { name: "Orion Stars", subtitle: "Cosmic Spins", category: "Slots", badge: TRENDING, image: "/games/game-orionstars.jpg", url: "http://www.orionstarsonline.com/", accent: "#2de2ff" },
+  { name: "Game Vault", subtitle: "Golden Rewards", category: "Slots", badge: NEW, image: "/games/game-gamevault.jpg", url: "https://download.gamevault999.com/", accent: "#ffc63d" },
+  { name: "Mafia", subtitle: "Aces High", category: "Slots", badge: NEW, image: "/games/game-mafia.jpg", url: "https://mafia77777.com/", accent: "#d4af37" },
   { name: "Panda Master", subtitle: "Master Wins", category: "Fish", badge: TRENDING, image: "/games/game-pandamaster.png", url: "https://pandamaster.com/", accent: "#34d399" },
-  { name: "Milkyway", subtitle: "Galaxy Spins", category: "Slots", image: "/games/game-milkyway.png", url: "https://milkywayapp.xyz/", accent: "#b056ff" },
+  { name: "Milkyway", subtitle: "Galaxy Spins", category: "Slots", image: "/games/game-milkyway.jpg", url: "https://milkywayapp.xyz/", accent: "#b056ff" },
   { name: "Ultra Panda", subtitle: "Fortune Panda", category: "Fish", badge: HOT, image: "/games/game-ultrapanda.png", url: "http://www.ultrapanda.mobi/", accent: "#aaff3c" },
   { name: "Cash Frenzy", subtitle: "Bonus Rush", category: "Slots", image: "/games/game-cashfrenzy.png", url: "https://www.cashfrenzy777.com/m", accent: "#ff7a2f" },
   { name: "Vblink", subtitle: "Neon Spins", category: "Slots", badge: NEW, image: "/games/game-vblink.png", url: "https://www.vblink777.com/", accent: "#2de2ff" },
-  { name: "Cash Machine", subtitle: "Money Reels", category: "Slots", image: "/games/game-cashmachine.png", url: "http://www.cashmachine777.com/", accent: "#ffc63d" },
+  { name: "Cash Machine", subtitle: "Money Reels", category: "Slots", image: "/games/game-cashmachine.jpg", url: "http://www.cashmachine777.com/", accent: "#ffc63d" },
   { name: "Joker777", subtitle: "Wild Cards", category: "Slots", badge: NEW, image: "/games/game-joker777.png", url: "https://www.joker777.win/", accent: "#ff2e9a" },
-  { name: "Gameroom", subtitle: "VIP Lounge", category: "Slots", image: "/games/game-gameroom.png", url: "https://www.gameroom777.com/", accent: "#2de2ff" },
-  { name: "MR.Allinone", subtitle: "All-In Action", category: "Fish", image: "/games/game-mrallinone.png", url: "http://www.mrallinone777.com/", accent: "#b056ff" },
+  { name: "Gameroom", subtitle: "VIP Lounge", category: "Slots", image: "/games/game-gameroom.jpg", url: "https://www.gameroom777.com/", accent: "#2de2ff" },
+  { name: "MR.Allinone", subtitle: "All-In Action", category: "Fish", image: "/games/game-mrallinone.jpg", url: "http://www.mrallinone777.com/", accent: "#b056ff" },
 ];
 
 export const CATEGORIES = ["All", "Slots", "Fish"] as const;
