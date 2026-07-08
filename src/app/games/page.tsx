@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
-import GameCard from "@/components/GameCard";
+import GameRow from "@/components/games/GameRow";
+import RecentBigWins from "@/components/RecentBigWins";
 import { GAMES, CATEGORIES } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -21,7 +22,7 @@ export default function GamesPage() {
 
   return (
     <div className="px-4 pt-10">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-3xl">
         {/* Promo banner */}
         <div className="relative overflow-hidden rounded-[2rem] border border-white/12 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.9)]">
           <Image
@@ -30,9 +31,14 @@ export default function GamesPage() {
             width={1778}
             height={884}
             priority
-            sizes="(max-width:1280px) 100vw, 1280px"
+            sizes="(max-width:768px) 100vw, 768px"
             className="h-auto w-full"
           />
+        </div>
+
+        {/* Recent Big Wins */}
+        <div className="mt-6">
+          <RecentBigWins />
         </div>
 
         {/* Controls */}
@@ -67,11 +73,11 @@ export default function GamesPage() {
           </label>
         </div>
 
-        {/* Grid */}
+        {/* List */}
         {filtered.length > 0 ? (
-          <div className="mt-6 grid grid-cols-2 gap-4 pb-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-            {filtered.map((g, i) => (
-              <GameCard key={g.name} game={g} index={i} />
+          <div className="mt-2 space-y-3 pb-4">
+            {filtered.map((g) => (
+              <GameRow key={g.name} game={g} />
             ))}
           </div>
         ) : (

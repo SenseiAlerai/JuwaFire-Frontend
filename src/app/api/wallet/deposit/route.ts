@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/auth";
 import { applyTransaction, WalletError } from "@/lib/wallet";
-import { creditReferralOnFirstDeposit } from "@/lib/referral";
+import { creditReferralOnDeposit } from "@/lib/referral";
 
 // NOTE: real deposits need a payment gateway. For now this credits test funds
 // so the wallet loop is demoable end-to-end. Wire a provider before going live.
@@ -15,15 +15,11 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
 
+  const amountCents = Math.round(parsed.data.amount * 100);
   try {
-    const balance = await applyTransaction(
-      session.user.id,
-      "deposit",
-      Math.round(parsed.data.amount * 100),
-      "Test deposit",
-    );
-    // Pay out referral rewards on the player's first deposit (best-effort).
-    await creditReferralOnFirstDeposit(session.user.id);
+    const balance = await applyTransaction(session.user.id, "deposit", amountCents, "Test deposit");
+    // Pay the referrer $10 once this friend has deposited $10+ (best-effort).
+    await creditReferralOnDeposit(session.user.id, amountCents);
     return NextResponse.json({ ok: true, balanceCents: balance });
   } catch (e) {
     const msg = e instanceof WalletError ? e.message : "Something went wrong";

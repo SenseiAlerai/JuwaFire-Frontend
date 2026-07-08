@@ -43,9 +43,12 @@ export default function ReferCard({ link }: { link: string }) {
       </span>
 
       <h2 className="shine-text relative mx-auto mt-5 max-w-sm font-display text-3xl font-extrabold uppercase leading-tight tracking-tight sm:text-4xl">
-        Refer Friends &amp; Get Rewarded
+        Refer Friends &amp; Get <span className="text-lime">$10</span>
       </h2>
-      <p className="relative mt-3 font-semibold text-ink-soft">When you refer your friends</p>
+      <p className="relative mt-3 font-semibold text-ink-soft">
+        Earn <span className="font-bold text-ink">$10</span> for every friend who deposits{" "}
+        <span className="font-bold text-ink">$10+</span>
+      </p>
 
       {/* link + copy */}
       <div className="relative mt-5 flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 p-1.5">

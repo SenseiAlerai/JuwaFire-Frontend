@@ -3,8 +3,10 @@ import { db } from "@/db";
 import { users, transactions } from "@/db/schema";
 import { applyTransaction } from "@/lib/wallet";
 
-/** Flat referral reward, in cents. Both the referrer and the new player get this. */
+/** Flat referral reward paid to the referrer, in cents. */
 export const REFERRAL_REWARD_CENTS = 1000; // $10
+/** The referred friend must deposit at least this much for the reward to unlock. */
+export const REFERRAL_MIN_DEPOSIT_CENTS = 1000; // $10
 
 // Note prefix that tags a *referrer-side* payout, so we can total earnings & list history.
 const EARN_PREFIX = "Referral bonus";
@@ -14,19 +16,17 @@ function earnNote(friendUsername: string | null) {
 }
 
 /**
- * Credit both sides of a referral the first time a referred player deposits.
- * Safe to call after every deposit — it only pays out on the player's FIRST
- * deposit, and never throws (a referral hiccup must not break the deposit).
+ * Pay the referrer $10 once a friend they invited deposits $10 or more.
+ * Safe to call after every deposit — it only pays out when the deposit clears
+ * the minimum, only once per referred friend, and never throws (a referral
+ * hiccup must not break the deposit).
  */
-export async function creditReferralOnFirstDeposit(depositorId: string): Promise<void> {
+export async function creditReferralOnDeposit(
+  depositorId: string,
+  depositAmountCents: number,
+): Promise<void> {
   try {
-    // Only the player's very first deposit qualifies. applyTransaction has
-    // already written the deposit row, so a first deposit means count === 1.
-    const [dep] = await db
-      .select({ n: count() })
-      .from(transactions)
-      .where(and(eq(transactions.userId, depositorId), eq(transactions.type, "deposit")));
-    if (!dep || dep.n !== 1) return;
+    if (depositAmountCents < REFERRAL_MIN_DEPOSIT_CENTS) return;
 
     const friend = await db.query.users.findFirst({ where: eq(users.id, depositorId) });
     if (!friend?.referredBy || friend.referredBy === depositorId) return;
@@ -34,14 +34,16 @@ export async function creditReferralOnFirstDeposit(depositorId: string): Promise
     const referrer = await db.query.users.findFirst({ where: eq(users.id, friend.referredBy) });
     if (!referrer) return;
 
-    // Referrer earns $10; the new player gets a $10 welcome bonus too.
-    await applyTransaction(referrer.id, "referral", REFERRAL_REWARD_CENTS, earnNote(friend.username));
-    await applyTransaction(
-      friend.id,
-      "referral",
-      REFERRAL_REWARD_CENTS,
-      `Welcome referral bonus (referred by @${referrer.username ?? "a friend"})`,
-    );
+    // Only reward once per referred friend.
+    const note = earnNote(friend.username);
+    const [already] = await db
+      .select({ id: transactions.id })
+      .from(transactions)
+      .where(and(eq(transactions.userId, referrer.id), eq(transactions.type, "referral"), eq(transactions.note, note)))
+      .limit(1);
+    if (already) return;
+
+    await applyTransaction(referrer.id, "referral", REFERRAL_REWARD_CENTS, note);
   } catch {
     // swallow — referral rewards are best-effort and must never block a deposit
   }
@@ -51,7 +53,7 @@ export type ReferralHistoryEntry = { note: string; amountCents: number; createdA
 
 export type ReferralStats = {
   invited: number; // signed up with my link
-  qualified: number; // referred friends who deposited (i.e. paid out)
+  qualified: number; // referred friends who deposited $10+ (i.e. paid out)
   earnedCents: number; // total $ I earned from referrals
   history: ReferralHistoryEntry[];
 };

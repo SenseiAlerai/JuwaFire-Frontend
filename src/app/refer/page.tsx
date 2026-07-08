@@ -26,7 +26,7 @@ const STEPS = [
   {
     icon: Coins,
     color: "#aaff3c",
-    text: "When your referred friend signs up and makes their first deposit, you both get a $10 bonus.",
+    text: "When your referred friend signs up and deposits $10 or more, you get a $10 reward straight to your wallet.",
   },
   {
     icon: Trophy,
@@ -67,8 +67,8 @@ export default async function ReferPage() {
               Invite Friends &amp; Earn
             </h2>
             <p className="mx-auto mt-2 max-w-md text-center text-ink-soft">
-              Share your link. When a friend signs up and completes the requirements, both of you get
-              rewarded.
+              Share your link. When a friend signs up and deposits $10 or more, a $10 reward lands in
+              your wallet.
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
