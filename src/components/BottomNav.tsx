@@ -3,16 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Wallet, Gamepad2, User, Menu as MenuIcon } from "lucide-react";
+import { Home, Coins, Gamepad2, HandCoins, Menu as MenuIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 import MenuSheet from "./MenuSheet";
 
 const ITEMS = [
   { key: "menu", label: "Menu", icon: MenuIcon },
-  { key: "wallet", href: "/dashboard", label: "Wallet", icon: Wallet },
+  { key: "buy", href: "/dashboard", label: "Buy", icon: Coins },
   { key: "home", href: "/", label: "Home", icon: Home, center: true },
   { key: "games", href: "/games", label: "Games", icon: Gamepad2 },
-  { key: "profile", href: "/profile", label: "Profile", icon: User },
+  { key: "redeem", href: "/cashout", label: "Redeem", icon: HandCoins },
 ] as const;
 
 /** Thumb-reachable bottom tab bar — mobile only. */

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { Wallet, LogOut } from "lucide-react";
 import { CandyLink } from "./CandyButton";
+import WalletPill from "./nav/WalletPill";
+import NotifBell from "./nav/NotifBell";
+import UserMenu from "./nav/UserMenu";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
@@ -66,20 +67,12 @@ export default function Navbar({ user }: { user: NavUser }) {
         </ul>
 
         {/* auth controls — visible on all sizes */}
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {user ? (
             <>
-              <CandyLink href="/dashboard" variant="primary" size="sm">
-                <Wallet className="h-4 w-4" />
-                <span className="max-w-[7rem] truncate">{displayName}</span>
-              </CandyLink>
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                aria-label="Sign out"
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white/5 text-ink-soft transition-colors hover:bg-white/10 hover:text-ink"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
+              <WalletPill />
+              <NotifBell />
+              <UserMenu name={displayName} />
             </>
           ) : (
             <>

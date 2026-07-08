@@ -46,12 +46,12 @@ export default async function RootLayout({
     <html lang="en" className={`${sora.variable} ${jakarta.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
         <ConfettiBackground />
-        <Navbar user={session?.user ?? null} />
         <GameAccountsProvider loggedIn={!!session?.user}>
+          <Navbar user={session?.user ?? null} />
           <main className="flex-1">{children}</main>
+          <Footer />
+          <BottomNav />
         </GameAccountsProvider>
-        <Footer />
-        <BottomNav />
         <Toaster />
         <SoundToggle />
         <SpinWheelWidget loggedIn={!!session?.user} />
