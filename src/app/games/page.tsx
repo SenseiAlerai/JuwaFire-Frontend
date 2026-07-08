@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import GameCard from "@/components/GameCard";
-import JackpotTicker from "@/components/JackpotTicker";
 import { GAMES, CATEGORIES } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -24,7 +23,7 @@ export default function GamesPage() {
     <div className="px-4 pt-10">
       <div className="mx-auto max-w-7xl">
         {/* Promo banner */}
-        <div className="relative mb-6 overflow-hidden rounded-[2rem] border border-white/12 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.9)]">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/12 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.9)]">
           <Image
             src="/banner-welcome.jpg"
             alt="Welcome to JuwaFire — get a 20% bonus on your first deposit"
@@ -34,19 +33,6 @@ export default function GamesPage() {
             sizes="(max-width:1280px) 100vw, 1280px"
             className="h-auto w-full"
           />
-        </div>
-
-        {/* Header banner */}
-        <div className="candy-card relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
-          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-magenta/40 blur-3xl" />
-          <h1 className="relative font-display text-4xl font-extrabold text-ink sm:text-5xl">
-            The Games <span className="text-magenta">Floor</span>
-          </h1>
-          <p className="relative mt-2 max-w-xl text-ink-soft">
-            Every game platform under one roof — Juwa, Fire Kirin, Orion Stars &amp; more. Tonight&apos;s
-            mega jackpot is sitting at{" "}
-            <JackpotTicker className="font-display font-bold text-lime" /> — go take it.
-          </p>
         </div>
 
         {/* Controls */}
