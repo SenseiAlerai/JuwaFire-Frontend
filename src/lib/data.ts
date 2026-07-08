@@ -41,6 +41,32 @@ export const GAMES: Game[] = [
 
 export const CATEGORIES = ["All", "Slots", "Fish"] as const;
 
+/* ────────────────────────────────────────────────────────────
+   Store — coin packages. 1 coin = $1 of play value; `price` is the
+   discounted sale price. `was` (= coins) shows the struck-through value.
+   ──────────────────────────────────────────────────────────── */
+export type CoinPack = { coins: number; price: number; badge?: string };
+
+export const FLASH_SALE = { title: "World Cup Semi Finale", coins: 24, price: 19.99 };
+
+export const WELCOME_PACKS: CoinPack[] = [
+  { coins: 20, price: 9.99, badge: "DEAL" },
+  { coins: 25, price: 14.99, badge: "POPULAR" },
+  { coins: 40, price: 29.99, badge: "STEAL" },
+];
+
+export const FEATURED_PACKS: CoinPack[] = [
+  { coins: 11, price: 9.99, badge: "HOT" },
+  { coins: 19, price: 17.99, badge: "HOT" },
+  { coins: 22, price: 19.99, badge: "POPULAR" },
+  { coins: 27, price: 24.99, badge: "LIMITED" },
+  { coins: 33, price: 29.99, badge: "STEAL" },
+  { coins: 55, price: 49.99 },
+  { coins: 110, price: 99.99 },
+  { coins: 65, price: 59.99, badge: "BEST VALUE" },
+  { coins: 220, price: 199.99 },
+];
+
 export type Promo = {
   title: string;
   blurb: string;

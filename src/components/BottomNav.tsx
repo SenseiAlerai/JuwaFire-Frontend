@@ -9,7 +9,7 @@ import MenuSheet from "./MenuSheet";
 
 const ITEMS = [
   { key: "menu", label: "Menu", icon: MenuIcon },
-  { key: "buy", href: "/dashboard", label: "Buy", icon: Coins },
+  { key: "buy", href: "/store", label: "Buy", icon: Coins },
   { key: "home", href: "/", label: "Home", icon: Home, center: true },
   { key: "games", href: "/games", label: "Games", icon: Gamepad2 },
   { key: "redeem", href: "/cashout", label: "Redeem", icon: HandCoins },
