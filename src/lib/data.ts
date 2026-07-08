@@ -42,6 +42,31 @@ export const GAMES: Game[] = [
 export const CATEGORIES = ["All", "Slots", "Fish"] as const;
 
 /* ────────────────────────────────────────────────────────────
+   Home game shelves (OrionStars-style sections). DEMO CONTENT:
+   real games get tagged per section later — for now each shelf shows
+   a rotated slice of GAMES so the sections look distinct.
+   ──────────────────────────────────────────────────────────── */
+export type HomeSection = { key: string; title: string; games: Game[]; ranked?: boolean };
+
+const rot = (n: number) => [...GAMES.slice(n % GAMES.length), ...GAMES.slice(0, n % GAMES.length)];
+
+export const HOME_SECTIONS: HomeSection[] = [
+  { key: "new", title: "New Games", games: rot(1) },
+  { key: "hot", title: "Hot Games", games: rot(5) },
+  { key: "top10", title: "Top 10 Games", games: rot(0).slice(0, 10), ranked: true },
+  { key: "table", title: "Table Games", games: rot(8) },
+  { key: "fishing", title: "Fishing", games: GAMES.filter((g) => g.category === "Fish") },
+  { key: "crash", title: "Crash Game", games: rot(3) },
+  { key: "instant", title: "Instant Win", games: rot(11) },
+  { key: "keno", title: "Keno", games: rot(6) },
+  { key: "shooting", title: "Shooting", games: rot(9) },
+  { key: "live", title: "Live Casino", games: rot(4) },
+  { key: "scratch", title: "Scratch Cards", games: rot(12) },
+  { key: "bingo", title: "Bingo", games: rot(7) },
+  { key: "slots", title: "Slots", games: GAMES.filter((g) => g.category === "Slots") },
+];
+
+/* ────────────────────────────────────────────────────────────
    Store — coin packages. 1 coin = $1 of play value; `price` is the
    discounted sale price. `was` (= coins) shows the struck-through value.
    ──────────────────────────────────────────────────────────── */
