@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X, Sparkles } from "lucide-react";
@@ -24,6 +24,10 @@ const PRIZES = [
   { label: "100",  sub: "SPINS",   coin: "#aaff3c" },
   { label: "🔥",   sub: "JACKPOT", coin: "#ff3b5c" },
 ];
+
+/* Daily-spin cooldown (client-side, per device). */
+const SPIN_KEY = "juwa:lastSpinAt";
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
 /* alternating high-contrast: deep casino red ↔ near-black purple */
 const SEG_COLORS = ["#7a0c1f", "#0c0420"];
@@ -368,9 +372,28 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [result,   setResult]   = useState<string | null>(null);
+  // null = not yet checked (avoids a flash); true = spin ready; false = on cooldown
+  const [available, setAvailable] = useState<boolean | null>(null);
+
+  // Check the daily cooldown on mount; auto-reappear when it elapses.
+  useEffect(() => {
+    let last = 0;
+    try { last = Number(localStorage.getItem(SPIN_KEY) || 0); } catch { /* ignore */ }
+    const remaining = last ? last + COOLDOWN_MS - Date.now() : 0;
+    if (remaining <= 0) {
+      setAvailable(true);
+      return;
+    }
+    setAvailable(false);
+    const id = setTimeout(() => setAvailable(true), remaining);
+    return () => clearTimeout(id);
+  }, []);
 
   function spin() {
-    if (spinning) return;
+    if (spinning || available === false) return;
+    // Consume today's spin — hide the widget until the cooldown elapses.
+    try { localStorage.setItem(SPIN_KEY, String(Date.now())); } catch { /* ignore */ }
+    setAvailable(false);
     setResult(null);
     setSpinning(true);
     sfxSpin();
@@ -413,9 +436,9 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
 
   return (
     <>
-      {/* ── PEEKING WHEEL ──────────────────────────────────── */}
+      {/* ── PEEKING WHEEL (hidden while on cooldown) ─────────── */}
       <AnimatePresence>
-        {!open && (
+        {!open && available && (
           <motion.div
             key="peek"
             initial={{ x: 150 }}
@@ -584,7 +607,7 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
                         <>
                           <p className="mt-1 text-xs text-white/40">Prize added to your account</p>
                           <button
-                            onClick={() => setResult(null)}
+                            onClick={() => setOpen(false)}
                             className="mt-4 cursor-pointer text-xs text-white/30 underline-offset-2 transition-colors hover:text-white/60 hover:underline"
                           >
                             Come back tomorrow for another spin
