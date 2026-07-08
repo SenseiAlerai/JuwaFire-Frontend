@@ -11,7 +11,6 @@ import {
 
 /* Mirrors OrionStars' left sidebar menu, mapped to our routes. */
 const FEATURED = [
-  { href: "/promotions", label: "Spin Wheel", icon: Disc3, color: "#ffc63d" },
   { href: "/promotions", label: "Promotion", icon: Gift, color: "#ff2e9a" },
 ];
 
@@ -111,6 +110,23 @@ export default function MenuSheet({
 
             {/* scrollable vertical nav */}
             <div className="no-scrollbar flex-1 overflow-y-auto px-3 pb-4">
+              {/* Spin Wheel opens the daily wheel (not a page) */}
+              <button
+                onClick={() => {
+                  onClose();
+                  window.dispatchEvent(new Event("juwa:open-spin"));
+                }}
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/8 active:bg-white/10"
+              >
+                <span
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
+                  style={{ background: "#ffc63d26", boxShadow: "0 0 14px #ffc63d33" }}
+                >
+                  <Disc3 className="h-4.5 w-4.5" style={{ color: "#ffc63d" }} />
+                </span>
+                <span className="font-display text-sm font-bold text-ink">Spin Wheel</span>
+              </button>
+
               {FEATURED.map((l) => (
                 <Row key={l.label} href={l.href} label={l.label} Icon={l.icon} color={l.color} onClose={onClose} />
               ))}

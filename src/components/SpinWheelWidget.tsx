@@ -389,6 +389,27 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
     return () => clearTimeout(id);
   }, []);
 
+  // Let other UI (e.g. the Menu's "Spin Wheel") open the wheel.
+  useEffect(() => {
+    const openIt = () => { setResult(null); setOpen(true); };
+    window.addEventListener("juwa:open-spin", openIt);
+    return () => window.removeEventListener("juwa:open-spin", openIt);
+  }, []);
+
+  // Human-readable time until the next spin (for the cooldown message).
+  function cooldownLabel() {
+    try {
+      const last = Number(localStorage.getItem(SPIN_KEY) || 0);
+      const ms = last + COOLDOWN_MS - Date.now();
+      if (ms <= 0) return "";
+      const h = Math.floor(ms / 3_600_000);
+      const m = Math.floor((ms % 3_600_000) / 60_000);
+      return h > 0 ? `${h}h ${m}m` : `${m}m`;
+    } catch {
+      return "";
+    }
+  }
+
   function spin() {
     if (spinning || available === false) return;
     // Consume today's spin — hide the widget until the cooldown elapses.
@@ -642,6 +663,29 @@ export default function SpinWheelWidget({ loggedIn = false }: { loggedIn?: boole
                           </p>
                         </>
                       )}
+                    </motion.div>
+                  ) : available === false ? (
+                    <motion.div key="cooldown" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                      <p
+                        className="font-display text-2xl font-extrabold uppercase tracking-wide text-gold"
+                        style={{ textShadow: "0 0 22px rgba(255,198,61,0.5)" }}
+                      >
+                        Come back tomorrow!
+                      </p>
+                      <p className="mx-auto mt-1 max-w-[16rem] text-xs text-white/50">
+                        You&apos;ve used today&apos;s free spin.
+                        {cooldownLabel() ? ` Next spin in ${cooldownLabel()}.` : ""}
+                      </p>
+                      <button
+                        onClick={() => setOpen(false)}
+                        className="mt-4 w-full cursor-pointer rounded-2xl py-4 font-display text-base font-extrabold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+                        style={{
+                          background: "linear-gradient(135deg,#ff2e9a,#b056ff)",
+                          boxShadow: "0 8px 32px -8px rgba(255,46,154,0.8), inset 0 1px 0 rgba(255,255,255,0.2)",
+                        }}
+                      >
+                        Got it
+                      </button>
                     </motion.div>
                   ) : (
                     <motion.div key="cta" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
