@@ -101,7 +101,7 @@ export default function GameCard({
 
         {/* title */}
         <span
-          className="absolute inset-x-0 bottom-0 p-3.5 transition-transform duration-300 md:group-hover:-translate-y-12"
+          className="absolute inset-x-0 bottom-0 p-3.5 pb-14 transition-transform duration-300 md:pb-3.5 md:group-hover:-translate-y-12"
           style={{ transform: "translateZ(18px)" }}
         >
           <span className="block font-display text-base font-bold leading-tight text-white drop-shadow sm:text-lg">
