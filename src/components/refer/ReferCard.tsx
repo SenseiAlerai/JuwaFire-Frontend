@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check, Share2 } from "lucide-react";
+import { Copy, Check, Share2, Users } from "lucide-react";
 
 export default function ReferCard({ link }: { link: string }) {
   const [copied, setCopied] = useState(false);
@@ -16,56 +16,62 @@ export default function ReferCard({ link }: { link: string }) {
     }
   }
 
-  const msg = encodeURIComponent(`Join me on JuwaFire and we both get $10! ${link}`);
-  const shares = [
-    { name: "WhatsApp", href: `https://wa.me/?text=${msg}`, color: "#25D366" },
-    { name: "Telegram", href: `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${msg}`, color: "#2AABEE" },
-    { name: "X", href: `https://twitter.com/intent/tweet?text=${msg}`, color: "#000000" },
-    { name: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, color: "#1877F2" },
-  ];
+  async function share() {
+    const data = {
+      title: "JuwaFire",
+      text: "Join me on JuwaFire and we both get $10! 🎰",
+      url: link,
+    };
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share(data);
+        return;
+      }
+    } catch {
+      /* user cancelled or unsupported — fall through to copy */
+    }
+    copy();
+  }
 
   return (
-    <div className="candy-card rounded-[2rem] p-6 sm:p-8">
-      <p className="font-display text-sm font-bold uppercase tracking-widest text-magenta">
-        Your referral link
-      </p>
+    <div className="candy-card relative overflow-hidden rounded-[2rem] p-6 text-center sm:p-8">
+      {/* glow */}
+      <div className="pointer-events-none absolute -top-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-magenta/40 blur-3xl" />
 
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+      <span className="relative inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 font-display text-sm font-semibold text-ink">
+        <Users className="h-4 w-4 text-magenta" /> Refer a Friend
+      </span>
+
+      <h2 className="shine-text relative mx-auto mt-5 max-w-sm font-display text-3xl font-extrabold uppercase leading-tight tracking-tight sm:text-4xl">
+        Refer Friends &amp; Get Rewarded
+      </h2>
+      <p className="relative mt-3 font-semibold text-ink-soft">When you refer your friends</p>
+
+      {/* link + copy */}
+      <div className="relative mt-5 flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 p-1.5">
         <input
           readOnly
           value={link}
           onFocus={(e) => e.currentTarget.select()}
-          className="min-w-0 flex-1 truncate rounded-xl border border-white/12 bg-white/5 px-4 py-3 font-medium text-ink outline-none"
           aria-label="Referral link"
+          className="min-w-0 flex-1 truncate bg-transparent px-3 py-2 text-sm font-medium text-ink outline-none"
         />
         <button
           onClick={copy}
-          className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#ff2e9a,#b056ff)] px-5 py-3 font-display font-bold text-white transition-transform active:scale-95"
+          className="flex shrink-0 items-center gap-1.5 rounded-xl bg-white/10 px-4 py-2.5 font-display text-sm font-bold text-gold transition-transform active:scale-95 hover:bg-white/15"
         >
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           {copied ? "Copied!" : "Copy"}
         </button>
       </div>
 
-      <div className="mt-5">
-        <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-ink-soft">
-          <Share2 className="h-4 w-4" /> Share it
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {shares.map((s) => (
-            <a
-              key={s.name}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full px-4 py-2 font-display text-sm font-bold text-white transition-transform active:scale-95"
-              style={{ background: s.color }}
-            >
-              {s.name}
-            </a>
-          ))}
-        </div>
-      </div>
+      {/* share */}
+      <button
+        onClick={share}
+        className="relative mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ffc63d,#ff5c3b)] py-3.5 font-display text-lg font-extrabold text-[#1a0e02] shadow-[0_10px_30px_-8px_rgba(255,122,47,0.7)] transition-transform active:scale-[0.98]"
+      >
+        <Share2 className="h-5 w-5" /> Share
+      </button>
     </div>
   );
 }

@@ -84,6 +84,7 @@ export const txTypeEnum = pgEnum("tx_type", [
   "cashout",
   "bonus",
   "adjustment",
+  "referral",
 ]);
 
 export const reqStatusEnum = pgEnum("req_status", [

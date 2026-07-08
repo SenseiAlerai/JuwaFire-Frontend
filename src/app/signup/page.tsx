@@ -38,10 +38,11 @@ export default function SignupPage() {
     setError(null);
     setLoading(true);
     try {
+      const ref = new URLSearchParams(window.location.search).get("ref") ?? undefined;
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), email: email.trim(), password }),
+        body: JSON.stringify({ username: username.trim(), email: email.trim(), password, ref }),
       });
       const data = await res.json();
       if (!res.ok) {

@@ -14,6 +14,7 @@ const schema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   email: z.string().email("Enter a valid email").optional().or(z.literal("")),
   name: z.string().max(60).optional(),
+  ref: z.string().max(40).optional(), // referrer's username, from ?ref= link
 });
 
 export async function POST(req: Request) {
@@ -48,6 +49,14 @@ export async function POST(req: Request) {
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
 
+  // Resolve the referral code (a username) to the referrer's id, if valid.
+  let referredBy: string | null = null;
+  const refCode = parsed.data.ref?.trim().toLowerCase();
+  if (refCode && refCode !== username) {
+    const referrer = await db.query.users.findFirst({ where: eq(users.username, refCode) });
+    if (referrer) referredBy = referrer.id;
+  }
+
   await db.insert(users).values({
     username,
     email,
@@ -55,6 +64,7 @@ export async function POST(req: Request) {
     name: parsed.data.name?.trim() || parsed.data.username,
     role: "player",
     balanceCents: 0,
+    referredBy,
   });
 
   return NextResponse.json({ ok: true });

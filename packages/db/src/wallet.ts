@@ -2,7 +2,7 @@ import { eq, sql } from "drizzle-orm";
 import { db } from "./client";
 import { users, transactions } from "./schema";
 
-export type TxType = "deposit" | "load" | "cashout" | "bonus" | "adjustment";
+export type TxType = "deposit" | "load" | "cashout" | "bonus" | "adjustment" | "referral";
 
 export class WalletError extends Error {}
 
