@@ -143,22 +143,21 @@ export const PROMOS: Promo[] = [
   },
 ];
 
+// Deposit-based tiers — now used ONLY for the daily max-cashout caps on /cashout.
+// (Cashback was removed; VIP progression is XP/rank-based, see src/lib/rank.ts.)
 export type VipTier = {
   name: string;
-  perk: string;
-  cashback: string;
   color: string;
   icon: IconName;
-  minDepositCents: number; // lifetime deposits needed to reach this tier
   dailyCashoutCents: number; // max cashout per day at this tier
 };
 
 export const VIP_TIERS: VipTier[] = [
-  { name: "Bronze", perk: "Daily free spins", cashback: "5%", color: "#cd7f32", icon: "flame", minDepositCents: 0, dailyCashoutCents: 40000 },
-  { name: "Silver", perk: "Weekly bonus box", cashback: "8%", color: "#9fb3c8", icon: "sparkles", minDepositCents: 10000, dailyCashoutCents: 55000 },
-  { name: "Gold", perk: "Priority support", cashback: "12%", color: "#ffc63d", icon: "coins", minDepositCents: 50000, dailyCashoutCents: 70000 },
-  { name: "Platinum", perk: "Faster payouts", cashback: "15%", color: "#7c9cff", icon: "crown", minDepositCents: 150000, dailyCashoutCents: 85000 },
-  { name: "Diamond", perk: "Personal host + top cashback", cashback: "20%", color: "#67e8f9", icon: "gem", minDepositCents: 500000, dailyCashoutCents: 100000 },
+  { name: "Bronze", color: "#cd7f32", icon: "flame", dailyCashoutCents: 40000 },
+  { name: "Silver", color: "#9fb3c8", icon: "sparkles", dailyCashoutCents: 55000 },
+  { name: "Gold", color: "#ffc63d", icon: "coins", dailyCashoutCents: 70000 },
+  { name: "Platinum", color: "#7c9cff", icon: "crown", dailyCashoutCents: 85000 },
+  { name: "Diamond", color: "#67e8f9", icon: "gem", dailyCashoutCents: 100000 },
 ];
 
 /* ────────────────────────────────────────────────────────────
