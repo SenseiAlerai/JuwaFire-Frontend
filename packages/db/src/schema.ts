@@ -30,6 +30,8 @@ export const users = pgTable("user", {
   balanceCents: integer("balanceCents").notNull().default(0),
   // lifetime total deposited in CENTS — drives VIP tier (only ever increases)
   lifetimeDepositCents: integer("lifetimeDepositCents").notNull().default(0),
+  // VIP experience points — earned from play (1 coin/$1 played = 100 XP); drives VIP rank
+  xp: integer("xp").notNull().default(0),
   // referral: the user id (or code) that referred this account
   referredBy: text("referredBy"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),

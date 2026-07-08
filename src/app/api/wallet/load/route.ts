@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { loadRequests } from "@/db/schema";
 import { applyTransaction, WalletError } from "@/lib/wallet";
+import { awardPlayXp } from "@/lib/vipXp";
 
 const schema = z.object({
   amount: z.number().positive().max(5000),
@@ -34,6 +35,8 @@ export async function POST(req: Request) {
       amountCents: cents,
       status: "pending",
     });
+    // Playing earns VIP XP (and may unlock a level-up reward).
+    await awardPlayXp(session.user.id, cents);
     return NextResponse.json({ ok: true, balanceCents: balance });
   } catch (e) {
     const msg = e instanceof WalletError ? e.message : "Something went wrong";

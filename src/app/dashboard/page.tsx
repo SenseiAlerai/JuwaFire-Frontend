@@ -5,10 +5,10 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { users, transactions } from "@/db/schema";
 import { formatUSD } from "@/lib/wallet";
-import { computeVip } from "@/lib/vip";
+import { computeRank } from "@/lib/rank";
+import RankBadge from "@/components/vip/RankBadge";
 import WalletActions from "@/components/dashboard/WalletActions";
 import { GAMES } from "@/lib/data";
-import { iconMap } from "@/lib/iconMap";
 import Link from "next/link";
 import { ArrowDownToLine, ArrowUpRight, Gift, Sparkles, ScrollText } from "lucide-react";
 
@@ -37,9 +37,10 @@ export default async function DashboardPage() {
 
   const greeting = me.username || me.name || "player";
 
-  // VIP tier from lifetime deposits (only ever climbs).
-  const { index: tierIdx, tier, nextTier, isMax, pct, toGoCents } = computeVip(me.lifetimeDepositCents);
-  const TierIcon = iconMap[tier.icon];
+  // VIP rank from XP earned by playing.
+  const xp = me.xp ?? 0;
+  const { rank, next, isMax, pct, xpToNext } = computeRank(xp);
+  const num = (n: number) => n.toLocaleString("en-US");
 
   return (
     <div className="px-4 pt-10">
@@ -85,52 +86,47 @@ export default async function DashboardPage() {
         <div className="candy-card mt-6 overflow-hidden rounded-[2rem] p-6 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span
-                className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl"
-                style={{ background: `${tier.color}26`, boxShadow: `0 0 24px ${tier.color}55` }}
-              >
-                <TierIcon className="h-6 w-6" style={{ color: tier.color }} />
-              </span>
+              <RankBadge color={rank.color} stars={rank.stars} size={48} glow />
               <div>
                 <p className="font-display text-xs font-bold uppercase tracking-widest text-ink-soft">
-                  VIP Tier {tierIdx + 1}
+                  VIP Rank
                 </p>
-                <h3 className="font-display text-xl font-extrabold" style={{ color: tier.color }}>
-                  {tier.name}
+                <h3 className="font-display text-xl font-extrabold" style={{ color: rank.color }}>
+                  {rank.name}
                 </h3>
                 <p className="text-xs font-semibold text-ink-soft">
-                  {tier.cashback} weekly net-loss cashback
+                  Withdrawal limit {num(rank.withdraw)}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 font-display font-bold text-gold">
-              {formatUSD(me.lifetimeDepositCents)} deposited
+              {num(xp)} XP
             </div>
           </div>
 
           {/* progress bar */}
           <div className="mt-5">
             <div className="mb-1.5 flex items-center justify-between text-xs font-semibold text-ink-soft">
-              <span>{tier.name}</span>
-              <span>{nextTier ? nextTier.name : "Max tier"}</span>
+              <span>{rank.name}</span>
+              <span>{next ? next.name : "Max rank"}</span>
             </div>
             <div className="h-3 w-full overflow-hidden rounded-full bg-white/8">
               <div
                 className="h-full rounded-full transition-all"
                 style={{
                   width: `${pct}%`,
-                  background: `linear-gradient(90deg, ${tier.color}, ${nextTier ? nextTier.color : "#ffc63d"})`,
-                  boxShadow: `0 0 16px ${tier.color}aa`,
+                  background: `linear-gradient(90deg, ${rank.color}, ${next ? next.color : "#ffc63d"})`,
+                  boxShadow: `0 0 16px ${rank.color}aa`,
                 }}
               />
             </div>
             <p className="mt-2 text-sm text-ink-soft">
               {isMax ? (
-                <>You&apos;ve reached the top — <span className="font-bold text-gold">{tier.name}</span> perks unlocked.</>
+                <>You&apos;ve reached the top — <span className="font-bold text-gold">{rank.name}</span> unlocked.</>
               ) : (
                 <>
-                  Deposit <span className="font-bold text-ink">{formatUSD(toGoCents)}</span> more to reach{" "}
-                  <span className="font-bold" style={{ color: nextTier!.color }}>{nextTier!.name}</span>.
+                  Play <span className="font-bold text-ink">{num(xpToNext)}</span> more XP to reach{" "}
+                  <span className="font-bold" style={{ color: next!.color }}>{next!.name}</span>.
                 </>
               )}
             </p>
