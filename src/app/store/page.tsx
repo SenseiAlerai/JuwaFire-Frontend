@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Coins, Loader2, Clock } from "lucide-react";
+import { Loader2, Clock } from "lucide-react";
 import { FLASH_SALE, WELCOME_PACKS, FEATURED_PACKS, type CoinPack } from "@/lib/data";
 import { useGameAccounts } from "@/components/games/GameAccountsProvider";
 import PaymentStrip from "@/components/PaymentStrip";
@@ -10,6 +11,14 @@ import { toast } from "@/lib/toast";
 import { sfxCoin, sfxError } from "@/lib/sound";
 
 const discountOf = (p: CoinPack) => Math.round((1 - p.price / p.coins) * 100);
+
+// Bigger packs get a fancier chest.
+const chestOf = (coins: number) =>
+  coins >= 199 ? "/store/chest-diamond.png"
+  : coins >= 65 ? "/store/chest-sapphire.png"
+  : coins >= 33 ? "/store/chest-gold.png"
+  : coins >= 22 ? "/store/chest-bronze.png"
+  : "/store/chest-starter.png";
 const keyOf = (p: { coins: number; price: number }) => `${p.coins}-${p.price}`;
 
 /** Rolling countdown to the next 3-day boundary (keeps the flash sale "live"). */
@@ -84,8 +93,8 @@ export default function StorePage() {
           <div className="mt-3 flex items-end justify-between gap-3">
             <div className="min-w-0">
               <p className="flex items-center gap-2 font-display text-4xl font-extrabold text-ink">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-[linear-gradient(135deg,#ffd64d,#ff9a2f)] text-[#1a0e02]">
-                  <Coins className="h-5 w-5" />
+                <span className="relative h-12 w-12 shrink-0">
+                  <Image src={chestOf(FLASH_SALE.coins)} alt="" fill sizes="48px" className="object-contain" />
                 </span>
                 {FLASH_SALE.coins}
                 <span className="text-lg text-ink-soft">coins</span>
@@ -170,9 +179,9 @@ function PackCard({ pack, busy, onBuy }: { pack: CoinPack; busy: boolean; onBuy:
       )}
 
       {/* art */}
-      <div className="grid place-items-center py-2">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[linear-gradient(135deg,#ffd64d,#ff9a2f)] text-[#1a0e02] shadow-[0_6px_20px_-6px_rgba(255,154,47,0.9)]">
-          <Coins className="h-7 w-7" />
+      <div className="grid place-items-center pt-1">
+        <span className="relative h-[4.5rem] w-[4.5rem] sm:h-24 sm:w-24">
+          <Image src={chestOf(pack.coins)} alt="" fill sizes="96px" className="object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
         </span>
       </div>
 
