@@ -65,31 +65,30 @@ export default function PromotionsPage() {
               >
                 <div className="pointer-events-none absolute -left-6 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
 
-                {/* flow layout: mascot stretches to card height, text grows the card */}
-                <div className="relative flex items-stretch gap-3 p-4 sm:gap-4 sm:p-5">
-                  <div className="relative min-h-[140px] w-[38%] shrink-0 self-stretch sm:min-h-[160px]">
-                    <Image
-                      src={b.mascot}
-                      alt=""
-                      fill
-                      quality={95}
-                      sizes="(max-width:640px) 40vw, 300px"
-                      className="object-contain object-bottom"
-                    />
-                  </div>
+                {/* big mascot fills the card height (taller card = bigger portrait) */}
+                <div className="pointer-events-none absolute inset-y-0 -left-2 bottom-0 w-[52%] sm:w-[46%]">
+                  <Image
+                    src={b.mascot}
+                    alt=""
+                    fill
+                    quality={95}
+                    sizes="(max-width:640px) 52vw, 320px"
+                    className="scale-[1.12] object-contain object-bottom [transform-origin:bottom]"
+                  />
+                </div>
 
-                  <div className="flex min-w-0 flex-1 flex-col justify-center py-1 text-right">
-                    <h2 className="font-display text-lg font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
-                      {b.title}
-                    </h2>
-                    <p className="mt-1 text-xs font-semibold text-white/90 sm:text-sm">{b.text}</p>
-                    <Link
-                      href={b.href}
-                      className="mt-3 ml-auto inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-4 py-2 font-display text-sm font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95 sm:px-5 sm:py-2.5 sm:text-base"
-                    >
-                      {b.cta}
-                    </Link>
-                  </div>
+                {/* text — flow controls card height, reserves the mascot's left space */}
+                <div className="relative flex min-h-[200px] flex-col justify-center py-5 pl-[48%] pr-5 text-right sm:min-h-[210px] sm:pr-7">
+                  <h2 className="font-display text-lg font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
+                    {b.title}
+                  </h2>
+                  <p className="mt-1 text-xs font-semibold text-white/90 sm:text-sm">{b.text}</p>
+                  <Link
+                    href={b.href}
+                    className="mt-3 ml-auto inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-4 py-2 font-display text-sm font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95 sm:px-5 sm:py-2.5 sm:text-base"
+                  >
+                    {b.cta}
+                  </Link>
                 </div>
               </div>
             </Reveal>
