@@ -40,10 +40,10 @@ export default function HeroCarousel() {
         <AnimatePresence initial={false}>
           <motion.div
             key={s.key}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0"
             style={{ background: `linear-gradient(100deg, ${s.c1} 0%, ${s.c2} 42%, #07070e 74%)` }}
           >
