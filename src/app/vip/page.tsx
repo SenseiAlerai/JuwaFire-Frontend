@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/db";
@@ -6,7 +7,7 @@ import Reveal from "@/components/Reveal";
 import RankBadge from "@/components/vip/RankBadge";
 import VipFaq from "@/components/vip/VipFaq";
 import { VIP_RANKS, computeRank } from "@/lib/rank";
-import { Crown, UserPlus, Zap, Gamepad2, Gift, ArrowUpFromLine, Layers, Wallet } from "lucide-react";
+import { UserPlus, Zap, Gamepad2, Gift, ArrowUpFromLine, Layers, Wallet } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -31,16 +32,31 @@ export default async function VipPage() {
   return (
     <div className="px-4 pt-8 pb-10">
       <div className="mx-auto max-w-2xl">
-        {/* Hero */}
+        {/* Hero banner */}
         <Reveal>
-          <div className="relative overflow-hidden rounded-[1.75rem] border border-gold/40 bg-[radial-gradient(120%_140%_at_50%_0%,rgba(255,198,61,0.22),transparent_60%)] px-6 py-10 text-center shadow-[0_0_50px_-18px_rgba(255,198,61,0.8)]">
-            <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[linear-gradient(135deg,#ffd64d,#ff9a2f)] text-[#1a0e02] shadow-[0_0_30px_rgba(255,154,47,0.8)]">
-              <Crown className="h-8 w-8" />
-            </span>
-            <h1 className="shine-text mt-4 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl">
-              VIP Club
-            </h1>
-            <p className="mt-2 text-ink-soft">Play, climb the ranks, and unlock bigger rewards.</p>
+          <div
+            className="relative aspect-[2/1] overflow-hidden rounded-[1.75rem] border border-gold/50 shadow-[0_0_50px_-18px_rgba(255,198,61,0.85)]"
+            style={{ background: "linear-gradient(100deg,#c98bff 0%,#7a2ca8 40%,#140a22 76%)" }}
+          >
+            <Image
+              src="/promos/promo-vip.png"
+              alt=""
+              fill
+              priority
+              sizes="(max-width:768px) 100vw, 672px"
+              className="object-contain object-bottom [object-position:right_bottom] [mask-image:linear-gradient(90deg,transparent,#000_42%)]"
+            />
+            <div className="absolute inset-y-0 left-0 flex max-w-[60%] flex-col justify-center px-6">
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-gold">
+                The Inner Circle
+              </span>
+              <span className="shine-text mt-1 font-display text-4xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
+                VIP Club
+              </span>
+              <span className="mt-2 text-sm font-semibold text-white/85">
+                Play, climb the ranks, unlock bigger rewards.
+              </span>
+            </div>
           </div>
         </Reveal>
 
