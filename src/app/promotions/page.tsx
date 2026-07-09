@@ -72,8 +72,9 @@ export default function PromotionsPage() {
                       src={b.mascot}
                       alt=""
                       fill
+                      quality={95}
                       sizes="(max-width:640px) 40vw, 300px"
-                      className="object-contain object-bottom drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                      className="object-contain object-bottom"
                     />
                   </div>
 
