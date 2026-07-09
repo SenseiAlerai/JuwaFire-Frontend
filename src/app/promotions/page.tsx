@@ -60,26 +60,34 @@ export default function PromotionsPage() {
           {BANNERS.map((b, i) => (
             <Reveal key={b.title} delay={i * 0.06}>
               <div
-                className="relative overflow-hidden rounded-3xl p-5 shadow-[0_18px_46px_-20px_rgba(0,0,0,0.9)] sm:p-6"
+                className="relative min-h-[168px] overflow-hidden rounded-3xl shadow-[0_18px_46px_-20px_rgba(0,0,0,0.9)] sm:min-h-[200px]"
                 style={{ background: `linear-gradient(115deg, ${b.from}, ${b.to})` }}
               >
                 <div className="pointer-events-none absolute -left-6 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
-                <div className="relative flex items-center gap-3">
-                  <span className="relative h-24 w-24 shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)] sm:h-28 sm:w-28">
-                    <Image src={b.mascot} alt="" fill sizes="112px" className="object-contain" />
-                  </span>
-                  <div className="min-w-0 flex-1 text-right">
-                    <h2 className="font-display text-xl font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
-                      {b.title}
-                    </h2>
-                    <p className="mt-1 text-sm font-semibold text-white/90">{b.text}</p>
-                    <Link
-                      href={b.href}
-                      className="mt-3 inline-flex items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-5 py-2.5 font-display font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95"
-                    >
-                      {b.cta}
-                    </Link>
-                  </div>
+
+                {/* big mascot, anchored to the card floor */}
+                <div className="absolute inset-y-0 -left-1 bottom-0 w-[48%] sm:w-[42%]">
+                  <Image
+                    src={b.mascot}
+                    alt=""
+                    fill
+                    sizes="(max-width:640px) 48vw, 300px"
+                    className="object-contain object-bottom drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                  />
+                </div>
+
+                {/* text */}
+                <div className="absolute inset-y-0 left-[46%] right-0 flex flex-col justify-center pr-5 text-right sm:pr-7">
+                  <h2 className="font-display text-xl font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
+                    {b.title}
+                  </h2>
+                  <p className="mt-1 text-sm font-semibold text-white/90">{b.text}</p>
+                  <Link
+                    href={b.href}
+                    className="mt-3 ml-auto inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-5 py-2.5 font-display font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95"
+                  >
+                    {b.cta}
+                  </Link>
                 </div>
               </div>
             </Reveal>
