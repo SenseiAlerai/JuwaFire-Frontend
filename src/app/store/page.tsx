@@ -179,9 +179,9 @@ function PackCard({ pack, busy, onBuy }: { pack: CoinPack; busy: boolean; onBuy:
       )}
 
       {/* art */}
-      <div className="grid place-items-center pt-1">
-        <span className="relative h-[4.5rem] w-[4.5rem] sm:h-24 sm:w-24">
-          <Image src={chestOf(pack.coins)} alt="" fill sizes="96px" className="object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
+      <div className="grid place-items-center">
+        <span className="relative h-24 w-full sm:h-28">
+          <Image src={chestOf(pack.coins)} alt="" fill sizes="120px" className="object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
         </span>
       </div>
 
