@@ -65,13 +65,13 @@ export default function PromotionsPage() {
               >
                 <div className="pointer-events-none absolute -left-6 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
 
-                {/* big mascot, anchored to the card floor */}
-                <div className="absolute inset-y-0 -left-1 bottom-0 w-[48%] sm:w-[42%]">
+                {/* big mascot, anchored to the card floor with a little top breathing room */}
+                <div className="absolute bottom-1 left-1 top-4 w-[44%] sm:w-[40%]">
                   <Image
                     src={b.mascot}
                     alt=""
                     fill
-                    sizes="(max-width:640px) 48vw, 300px"
+                    sizes="(max-width:640px) 44vw, 280px"
                     className="object-contain object-bottom drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
                   />
                 </div>
