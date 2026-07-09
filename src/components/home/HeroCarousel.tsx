@@ -5,14 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
-type Slide =
-  | { type: "image"; src: string; alt: string; href: string }
-  | { type: "text"; eyebrow: string; title: string; href: string; from: string; to: string };
+type Slide = {
+  key: string;
+  mascot: string;
+  eyebrow: string;
+  title: string;
+  cta: string;
+  href: string;
+  c1: string; // headline-side color
+  c2: string; // mid color (fades toward near-black under the mascot)
+};
 
 const SLIDES: Slide[] = [
-  { type: "image", src: "/banner-welcome.jpg", alt: "Welcome to JuwaFire — 20% first deposit bonus", href: "/store" },
-  { type: "text", eyebrow: "Fast Withdrawals", title: "24/7 Instant Redeem", href: "/cashout", from: "#ff3b5c", to: "#7a0c1f" },
-  { type: "text", eyebrow: "Bring a friend", title: "Refer & Earn $10", href: "/refer", from: "#b056ff", to: "#2a0a3f" },
+  { key: "welcome", mascot: "/mascot/mascot-blaze-dragon.png", eyebrow: "On your first deposit", title: "Get 20% Bonus", cta: "Claim Now", href: "/store", c1: "#ff2e9a", c2: "#7a0c4a" },
+  { key: "spin", mascot: "/mascot/mascot-blaze-goofy.png", eyebrow: "Every single day", title: "Daily Free Spin", cta: "Spin Now", href: "/", c1: "#ff9a1f", c2: "#7a2c0c" },
+  { key: "refer", mascot: "/mascot/mascot-blaze-dragons-duo.png", eyebrow: "Friend deposits $10+", title: "Refer & Earn $10", cta: "Invite Now", href: "/refer", c1: "#12b8c8", c2: "#0a3a6a" },
+  { key: "vip", mascot: "/mascot/mascot-blaze-dragon.png", eyebrow: "Play & climb the ranks", title: "Join the VIP Club", cta: "Learn More", href: "/vip", c1: "#b056ff", c2: "#3a0a5a" },
 ];
 
 export default function HeroCarousel() {
@@ -20,40 +28,48 @@ export default function HeroCarousel() {
   const n = SLIDES.length;
 
   useEffect(() => {
-    const id = setInterval(() => setI((p) => (p + 1) % n), 4500);
+    const id = setInterval(() => setI((p) => (p + 1) % n), 5000);
     return () => clearInterval(id);
   }, [n]);
 
-  const slide = SLIDES[i];
+  const s = SLIDES[i];
 
   return (
     <div className="relative mx-auto max-w-3xl">
       <div className="relative aspect-[2/1] overflow-hidden rounded-[1.75rem] border border-white/12 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.9)]">
         <AnimatePresence initial={false}>
           <motion.div
-            key={i}
+            key={s.key}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
             className="absolute inset-0"
+            style={{ background: `linear-gradient(100deg, ${s.c1} 0%, ${s.c2} 42%, #07070e 74%)` }}
           >
-            <Link href={slide.href} className="block h-full w-full">
-              {slide.type === "image" ? (
-                <Image src={slide.src} alt={slide.alt} fill priority sizes="(max-width:768px) 100vw, 768px" className="object-cover" />
-              ) : (
-                <div
-                  className="flex h-full w-full flex-col justify-center px-6"
-                  style={{ background: `linear-gradient(120deg, ${slide.from}, ${slide.to})` }}
-                >
-                  <span className="font-display text-xs font-bold uppercase tracking-widest text-white/80">
-                    {slide.eyebrow}
-                  </span>
-                  <span className="mt-1 font-display text-3xl font-extrabold uppercase leading-none text-white drop-shadow sm:text-4xl">
-                    {slide.title}
-                  </span>
-                </div>
-              )}
+            <Link href={s.href} className="block h-full w-full">
+              {/* mascot — dark bg blends into the gradient; left edge masked so it fades in */}
+              <Image
+                src={s.mascot}
+                alt=""
+                width={600}
+                height={900}
+                priority
+                className="absolute bottom-0 right-0 h-full w-auto object-contain object-bottom [mask-image:linear-gradient(90deg,transparent,#000_38%)]"
+              />
+
+              {/* text */}
+              <div className="absolute inset-y-0 left-0 flex max-w-[62%] flex-col justify-center px-5 sm:px-8">
+                <span className="font-display text-[11px] font-bold uppercase tracking-widest text-white/85 sm:text-xs">
+                  {s.eyebrow}
+                </span>
+                <span className="mt-1 font-display text-2xl font-extrabold uppercase leading-[0.95] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] sm:text-4xl">
+                  {s.title}
+                </span>
+                <span className="mt-3 inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-4 py-2 font-display text-sm font-extrabold text-[#1a0e02] shadow-[0_8px_22px_-8px_rgba(0,0,0,0.7)] sm:px-5 sm:py-2.5">
+                  {s.cta}
+                </span>
+              </div>
             </Link>
           </motion.div>
         </AnimatePresence>
