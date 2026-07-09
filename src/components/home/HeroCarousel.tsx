@@ -29,13 +29,13 @@ export default function HeroCarousel() {
   return (
     <div className="relative mx-auto max-w-3xl">
       <div className="relative aspect-[2/1] overflow-hidden rounded-[1.75rem] border border-white/12 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.9)]">
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
             key={i}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
             className="absolute inset-0"
           >
             <Link href={slide.href} className="block h-full w-full">
