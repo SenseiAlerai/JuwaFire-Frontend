@@ -86,7 +86,7 @@ export default async function DashboardPage() {
         <div className="candy-card mt-6 overflow-hidden rounded-[2rem] p-6 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <RankBadge color={rank.color} stars={rank.stars} size={48} glow />
+              <RankBadge name={rank.name} color={rank.color} size={44} glow />
               <div>
                 <p className="font-display text-xs font-bold uppercase tracking-widest text-ink-soft">
                   VIP Rank

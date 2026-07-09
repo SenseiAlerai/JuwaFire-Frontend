@@ -79,7 +79,7 @@ export default async function VipPage() {
               <div key={r.name} className="relative pt-8">
                 {/* badge overlaps the card top */}
                 <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2">
-                  <RankBadge color={r.color} stars={r.stars} glow={active} />
+                  <RankBadge name={r.name} color={r.color} size={84} glow={active} />
                 </div>
                 <div
                   className="rounded-3xl border bg-[rgba(12,14,26,0.9)] px-5 pb-5 pt-12"
