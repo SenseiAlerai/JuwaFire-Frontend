@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 const BANNERS = [
   {
-    title: "BONUS!",
-    text: "Bonus credit on every game you deposit.",
+    title: "20% WELCOME BONUS!",
+    text: "Get an extra 20% credited on your first deposit — automatically.",
     cta: "Claim Now",
     href: "/store",
     icon: Gift,
