@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
-import { Gift, Users, Crown, Disc3, Megaphone } from "lucide-react";
+import { Megaphone } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Promotions — JuwaFire",
@@ -14,7 +15,7 @@ const BANNERS = [
     text: "Get an extra 20% credited on your first deposit — automatically.",
     cta: "Claim Now",
     href: "/store",
-    icon: Gift,
+    mascot: "/mascot/mascot-blaze-dragon.png",
     from: "#ff2e9a",
     to: "#ff3b5c",
   },
@@ -23,7 +24,7 @@ const BANNERS = [
     text: "Get $10 for every friend who deposits $10 or more. Unlimited referrals, unlimited earnings.",
     cta: "Invite Now",
     href: "/refer",
-    icon: Users,
+    mascot: "/mascot/mascot-blaze-dragons-duo.png",
     from: "#12b8c8",
     to: "#3b82f6",
   },
@@ -32,7 +33,7 @@ const BANNERS = [
     text: "VIP members climb the ranks for bigger withdrawal limits and exclusive rewards.",
     cta: "More Info",
     href: "/vip",
-    icon: Crown,
+    mascot: "/mascot/mascot-blaze-goofy.png",
     from: "#ff7a2f",
     to: "#b056ff",
   },
@@ -41,7 +42,7 @@ const BANNERS = [
     text: "Unlock surprise bonuses, free credits, and exclusive rewards every spin.",
     cta: "Spin Now",
     href: "/",
-    icon: Disc3,
+    mascot: "/mascot/mascot-blaze-goofy.png",
     from: "#ffc63d",
     to: "#ff3b5c",
   },
@@ -63,9 +64,9 @@ export default function PromotionsPage() {
                 style={{ background: `linear-gradient(115deg, ${b.from}, ${b.to})` }}
               >
                 <div className="pointer-events-none absolute -left-6 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
-                <div className="relative flex items-center gap-4">
-                  <span className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-black/25 text-white ring-1 ring-white/25 sm:h-24 sm:w-24">
-                    <b.icon className="h-10 w-10 sm:h-12 sm:w-12" />
+                <div className="relative flex items-center gap-3">
+                  <span className="relative h-24 w-24 shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)] sm:h-28 sm:w-28">
+                    <Image src={b.mascot} alt="" fill sizes="112px" className="object-contain" />
                   </span>
                   <div className="min-w-0 flex-1 text-right">
                     <h2 className="font-display text-xl font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
