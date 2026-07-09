@@ -60,34 +60,35 @@ export default function PromotionsPage() {
           {BANNERS.map((b, i) => (
             <Reveal key={b.title} delay={i * 0.06}>
               <div
-                className="relative min-h-[168px] overflow-hidden rounded-3xl shadow-[0_18px_46px_-20px_rgba(0,0,0,0.9)] sm:min-h-[200px]"
+                className="relative overflow-hidden rounded-3xl shadow-[0_18px_46px_-20px_rgba(0,0,0,0.9)]"
                 style={{ background: `linear-gradient(115deg, ${b.from}, ${b.to})` }}
               >
                 <div className="pointer-events-none absolute -left-6 -top-8 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
 
-                {/* big mascot, anchored to the card floor with a little top breathing room */}
-                <div className="absolute bottom-1 left-1 top-4 w-[44%] sm:w-[40%]">
-                  <Image
-                    src={b.mascot}
-                    alt=""
-                    fill
-                    sizes="(max-width:640px) 44vw, 280px"
-                    className="object-contain object-bottom drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
-                  />
-                </div>
+                {/* flow layout: mascot stretches to card height, text grows the card */}
+                <div className="relative flex items-stretch gap-3 p-4 sm:gap-4 sm:p-5">
+                  <div className="relative min-h-[140px] w-[38%] shrink-0 self-stretch sm:min-h-[160px]">
+                    <Image
+                      src={b.mascot}
+                      alt=""
+                      fill
+                      sizes="(max-width:640px) 40vw, 300px"
+                      className="object-contain object-bottom drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                    />
+                  </div>
 
-                {/* text */}
-                <div className="absolute inset-y-0 left-[46%] right-0 flex flex-col justify-center pr-5 text-right sm:pr-7">
-                  <h2 className="font-display text-xl font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
-                    {b.title}
-                  </h2>
-                  <p className="mt-1 text-sm font-semibold text-white/90">{b.text}</p>
-                  <Link
-                    href={b.href}
-                    className="mt-3 ml-auto inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-5 py-2.5 font-display font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95"
-                  >
-                    {b.cta}
-                  </Link>
+                  <div className="flex min-w-0 flex-1 flex-col justify-center py-1 text-right">
+                    <h2 className="font-display text-lg font-extrabold uppercase leading-tight text-white drop-shadow sm:text-2xl">
+                      {b.title}
+                    </h2>
+                    <p className="mt-1 text-xs font-semibold text-white/90 sm:text-sm">{b.text}</p>
+                    <Link
+                      href={b.href}
+                      className="mt-3 ml-auto inline-flex w-fit items-center rounded-xl bg-[linear-gradient(135deg,#ffd64d,#ff7a2f)] px-4 py-2 font-display text-sm font-extrabold text-[#1a0e02] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition-transform active:scale-95 sm:px-5 sm:py-2.5 sm:text-base"
+                    >
+                      {b.cta}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </Reveal>
