@@ -12,8 +12,10 @@ import { cn } from "@/lib/cn";
 const LINKS = [
   { href: "/", label: "Home" },
   { href: "/games", label: "Games" },
+  { href: "/store", label: "Buy" },
   { href: "/promotions", label: "Promos" },
   { href: "/vip", label: "VIP" },
+  { href: "/cashout", label: "Redeem" },
 ];
 
 type NavUser = {
@@ -27,19 +29,15 @@ export default function Navbar({ user }: { user: NavUser }) {
   const displayName = user?.username || user?.name || "Player";
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-2 sm:px-5 sm:pt-3">
+    <header className="sticky top-0 z-50 border-b border-white/8 bg-[#05060f]/90 px-3 py-1.5 backdrop-blur-md sm:px-5">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-1 py-1 sm:px-2">
-        <Link
-          href="/"
-          className="-ml-2 -mt-1.5 block shrink-0 sm:-ml-3 sm:-mt-2"
-          aria-label="JuwaFire home"
-        >
+        <Link href="/" className="-ml-1 block shrink-0" aria-label="JuwaFire home">
           <Image
             src="/juwafire-logo.png"
             alt="JuwaFire Sweepstakes Games"
             width={1024}
             height={1024}
-            className="h-auto w-[102px] drop-shadow-[0_0_18px_rgba(255,46,154,0.35)] sm:w-[126px]"
+            className="h-auto w-[72px] drop-shadow-[0_0_18px_rgba(255,46,154,0.35)] sm:w-[80px]"
             priority
           />
         </Link>

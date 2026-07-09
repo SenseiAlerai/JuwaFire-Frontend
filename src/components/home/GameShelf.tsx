@@ -84,7 +84,7 @@ export default function GameShelf({
         </div>
       </div>
 
-      <div className="-mx-0 overflow-hidden">
+      <div className="mx-auto max-w-3xl overflow-hidden">
         {section.ranked ? (
           <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-4">
             {section.games.map((g, i) => (
